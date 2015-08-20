@@ -42,8 +42,6 @@ class DownloadViewController: UIViewController, UISearchBarDelegate, NSURLSessio
         req = NSURLRequest(URL:url)
         webView!.loadRequest(req)
         progressBar.progress = 0.0
-        //downloadView.frame.origin.y = 900
-        //backBarView.backgroundColor = UIColor(red: 199/255, green: 199/255, blue: 204/255, alpha: 1)
         searchBar.backgroundColor = UIColor.clearColor()
             }
     
