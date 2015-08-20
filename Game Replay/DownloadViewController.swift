@@ -31,6 +31,7 @@ class DownloadViewController: UIViewController, UISearchBarDelegate, NSURLSessio
     var req = NSURLRequest()
     var text: String!
     
+    
 
     override func viewDidLoad() {
         
