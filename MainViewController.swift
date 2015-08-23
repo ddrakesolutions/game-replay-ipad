@@ -89,6 +89,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     override func viewDidLoad() {
         super.viewDidLoad()
     
+        statsView.backgroundColor = UIColor.clearColor()
         stepBack.hidden = true
         stepOne.hidden = true
         ff.hidden = true

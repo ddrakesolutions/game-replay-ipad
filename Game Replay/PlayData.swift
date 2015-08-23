@@ -16,6 +16,7 @@ class PlayData: NSManagedObject {
     @NSManaged var playType: String
     @NSManaged var wasItCorrect: String
     @NSManaged var gameName: String
+    @NSManaged var comment: String
     
     override init(entity: NSEntityDescription,
         insertIntoManagedObjectContext context: NSManagedObjectContext!) {

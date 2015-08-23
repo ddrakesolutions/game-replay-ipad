@@ -418,7 +418,7 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <view contentMode="scaleToFill" id="f2w-r4-Xaj" customClass="StatView" customModule="Game_Replay" customModuleProvider="target">
+                            <view contentMode="scaleToFill" id="f2w-r4-Xaj" customClass="MarkView" customModule="Game_Replay" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="900" width="1024" height="768"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>

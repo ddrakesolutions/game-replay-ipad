@@ -10,10 +10,7 @@ import UIKit
 import CoreData
 
 class StatView: UIView {
-    
-    @IBOutlet weak var trailProgressView: StatsProgressView!
-    @IBOutlet weak var centerProgressView: StatsProgressView!
-    @IBOutlet weak var leadProgressView: StatsProgressView!
+
     
     var view: UIView!
     
@@ -32,6 +29,7 @@ class StatView: UIView {
         view = loadViewFromNib()
         view.frame = bounds
         view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
+        view.backgroundColor = UIColor(red: 246/255, green: 246/255, blue: 246/255, alpha: 1)
         addSubview(view)
         
     }
@@ -67,12 +65,6 @@ class StatView: UIView {
             
         }
         
-    trailProgressView.animateProgressViewToProgress(0.65)
-    centerProgressView.animateProgressViewToProgress(0.82)
-    leadProgressView.animateProgressViewToProgress(0.93)
-    trailProgressView.updateProgressViewLabelWithProgress(0.62 * 100)
-    centerProgressView.updateProgressViewLabelWithProgress(0.82 * 100)
-    leadProgressView.updateProgressViewLabelWithProgress(0.93 * 100)
     }
     
     @IBAction func closeStats(sender: AnyObject) {
