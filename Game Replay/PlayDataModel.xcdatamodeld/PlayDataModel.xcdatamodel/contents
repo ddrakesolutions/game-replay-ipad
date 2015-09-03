@@ -1,13 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8175.2" systemVersion="15A263e" minimumToolsVersion="Xcode 7.0">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="8193.2" systemVersion="15A279b" minimumToolsVersion="Xcode 7.0">
     <entity name="PlayInfo" representedClassName="PlayData" syncable="YES">
-        <attribute name="comment" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="gameName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="playType" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="position" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="wasItCorrect" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="play" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="PlayInfo" positionX="-63" positionY="-18" width="128" height="120"/>
+        <element name="PlayInfo" positionX="-63" positionY="-18" width="128" height="60"/>
     </elements>
 </model>

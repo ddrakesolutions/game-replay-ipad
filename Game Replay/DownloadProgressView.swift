@@ -37,10 +37,10 @@ class DownloadProgressView: UIView {
     
     func createLabel() {
         progressLabel = UILabel()
-        progressLabel.textColor = .whiteColor()
+        progressLabel.textColor = UIColor ( red: 0.9851, green: 0.0, blue: 0.2877, alpha: 1.0 )
         progressLabel.textAlignment = .Center
         progressLabel.text = "0 %"
-        progressLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 40.0)
+        progressLabel.font = UIFont(name: "HelveticaNeue-UltraLight", size: 50.0)
         progressLabel.translatesAutoresizingMaskIntoConstraints = false
         addSubview(progressLabel)
         // add constraints
@@ -68,14 +68,14 @@ class DownloadProgressView: UIView {
         progressLayer.path = UIBezierPath(arcCenter:centerPoint, radius: CGRectGetWidth(frame)/2 - 10.0, startAngle:startAngle, endAngle:endAngle, clockwise: true).CGPath
         progressLayer.backgroundColor = UIColor.clearColor().CGColor
         progressLayer.fillColor = nil
-        progressLayer.strokeColor = UIColor.whiteColor().CGColor
+        progressLayer.strokeColor = UIColor ( red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0 ).CGColor
         progressLayer.lineWidth = 4.0
         progressLayer.strokeStart = 0.0
         progressLayer.strokeEnd = 0.0
         layer.addSublayer(progressLayer)
         
         let dashedLayer = CAShapeLayer()
-        dashedLayer.strokeColor = UIColor(white: 1.0, alpha: 0.5).CGColor
+        dashedLayer.strokeColor = UIColor(white: 0.7479, alpha: 1.0).CGColor
         dashedLayer.fillColor = nil
         dashedLayer.lineDashPattern = [2, 4]
         dashedLayer.lineJoin = "round"

@@ -12,15 +12,11 @@ import CoreData
 @objc(PlayData)
 class PlayData: NSManagedObject {
     
-    @NSManaged var position: String
-    @NSManaged var playType: String
-    @NSManaged var wasItCorrect: String
-    @NSManaged var gameName: String
-    @NSManaged var comment: String
+    @NSManaged var play: String
     
     override init(entity: NSEntityDescription,
         insertIntoManagedObjectContext context: NSManagedObjectContext!) {
             super.init(entity: entity, insertIntoManagedObjectContext: context)
     }
-
+    
 }

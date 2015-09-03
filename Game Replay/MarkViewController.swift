@@ -139,11 +139,7 @@ class MarkViewController: UIViewController, UIGestureRecognizerDelegate, UIScrol
     
         let play = PlayData(entity: en!, insertIntoManagedObjectContext: context)
         
-        play.position = thPosition
-        play.playType = playType
-        play.wasItCorrect = wasItCorrect
-        play.gameName = gameName
-        do{
+             do{
             try context.save()
         }
         catch{

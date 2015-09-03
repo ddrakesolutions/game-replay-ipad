@@ -47,7 +47,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var playerView: UIView!
     @IBOutlet weak var gameScrollView: UIScrollView!
     @IBOutlet weak var playerScrollViewVisualEffectContainer: UIView!
-    @IBOutlet weak var statsView: StatView!
+    @IBOutlet weak var markView: MarkView!
+    @IBOutlet weak var statView: UIView!
     
     
     // MARK: - Variables
@@ -81,15 +82,15 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var numOfViews : CGFloat = 1
     var games = [String]()
     var bgImages = [UIImage]()
-
     
     
     // MARK: - ViewDidLoad
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
-        statsView.backgroundColor = UIColor.clearColor()
+        
+        markView.layer.cornerRadius = 10
+        markView.backgroundColor = UIColor.clearColor()
         stepBack.hidden = true
         stepOne.hidden = true
         ff.hidden = true
@@ -134,8 +135,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         gameScrollView.delegate = self
         gameScrollView.scrollEnabled = true
         gameScrollView.hidden = true
- 
-        
+        markView.transform = CGAffineTransformMakeScale(0.0,0.0)
+        markView.hidden = true
 }
     
     override func viewDidDisappear(animated: Bool) {
@@ -233,10 +234,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
        
 
     }
-    
-    
 
-    @IBAction func viewStats(sender: AnyObject) {
+    
+    
+   
+    @IBAction func showStatView(sender: AnyObject) {
+    
         
         UIView.animateWithDuration(0.5,
             delay: 0,
@@ -244,8 +247,32 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             initialSpringVelocity: 0.5,
             options: UIViewAnimationOptions.CurveEaseInOut,
             animations: { [unowned self] in
-                self.statsView.frame.origin.y = 0
+                
+                self.statView.frame.origin.y = 0
+                self.statView.awakeFromNib()
+                
             }, completion: nil)
+        
+    }
+    
+    
+
+    @IBAction func showMarkView(sender: AnyObject) {
+        
+        markView.hidden = false
+        
+        UIView.animateWithDuration(0.5,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: { [unowned self] in
+
+                //self.statsView.frame.origin.y = 138
+                self.markView.transform = CGAffineTransformMakeScale(1.0,1.0)
+
+            }, completion: nil)
+        
     }
     
     
@@ -1271,6 +1298,19 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
 }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

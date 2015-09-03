@@ -7,16 +7,31 @@
 //
 
 import UIKit
+import CoreData
 
-class MarkView: UIView, UIPickerViewDelegate, UIPickerViewDataSource {
+class MarkView: UIView, UITextFieldDelegate {
     
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var playPicker: UIPickerView!
+    @IBOutlet weak var commentsTextField: UITextField!
+    @IBOutlet weak var textFieldBGBlur: UIVisualEffectView!
+    @IBOutlet weak var playTypeSegment1: UISegmentedControl!
+    @IBOutlet weak var playTypeSegment2: UISegmentedControl!
+    @IBOutlet weak var playTypeSegment3: UISegmentedControl!
+    @IBOutlet weak var positionSegment: UISegmentedControl!
+    @IBOutlet weak var playOccurrenceSegment: UISegmentedControl!
+    @IBOutlet weak var callTypeSegment: UISegmentedControl!
+    @IBOutlet weak var wasItCorrectSegment: UISegmentedControl!
     
     var view: UIView!
-    var playType = ""
     
-    let pickerData = ["-----------------------", "BALLHANDLER/DRIBBLER", "POST PLAY", "REBOUNDING", "TRANSITION", "BLOCK/CHARGE", "SCREEN", "TRAVEL", "BACK COURT", "FREE THROW"]
+    var position = "0"
+    var playType = "0"
+    var callType = "0"
+    var playOccurrence = "0"
+    var wasItCorrect = "0"
+    var comments = "0"
+    var gameName = "0"
+    
+    let playData = ["BALLHANDLER/DRIBBLER", "POST PLAY", "OUT OF BOUNDS", "REBOUNDING", "TRANSITION", "BLOCK/CHARGE", "SCREEN", "TRAVEL", "BACK COURT", "FREE THROW"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -34,12 +49,10 @@ class MarkView: UIView, UIPickerViewDelegate, UIPickerViewDataSource {
         view.frame = bounds
         view.autoresizingMask = [UIViewAutoresizing.FlexibleWidth, UIViewAutoresizing.FlexibleHeight]
         view.backgroundColor = UIColor.clearColor()
-        scrollView.contentSize = CGSize(width: 4096, height: 679)
-        playPicker.dataSource = self
-        playPicker.delegate = self
-//        trailButton.layer.cornerRadius = 10
-//        trailButton.layer.borderWidth = 1
-//        trailButton.layer.borderColor = UIColor.blackColor().CGColor
+        commentsTextField.delegate = self
+        commentsTextField.keyboardType = UIKeyboardType.ASCIICapable
+        commentsTextField.returnKeyType = .Done
+        textFieldBGBlur.hidden = true
         addSubview(view)
     }
     
@@ -52,69 +65,212 @@ class MarkView: UIView, UIPickerViewDelegate, UIPickerViewDataSource {
         return view
 }
     
-    @IBAction func closeMarkView(sender: AnyObject) {
-        
-        
-        UIView.animateWithDuration(0.5,
+
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        UIView.animateWithDuration(0.3,
             delay: 0,
-            usingSpringWithDamping: 0.7,
+            usingSpringWithDamping: 5.7,
             initialSpringVelocity: 0.5,
             options: UIViewAnimationOptions.CurveEaseInOut,
             animations: { [unowned self] in
-                self.frame.origin.y = 900
+                self.commentsTextField.frame.origin.y -= 400
+                self.textFieldBGBlur.hidden = false
+            }, completion: nil)
+
+        return true
+    }
+    
+    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        
+        comments = commentsTextField.text!
+        
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            usingSpringWithDamping: 5.7,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: { [unowned self] in
+                self.commentsTextField.frame.origin.y += 400
+                self.textFieldBGBlur.hidden = true
             }, completion: nil)
         
-    }
-
-    @IBAction func positionClick(sender: UIButton) {
-        
-        var frame: CGRect = scrollView.frame
-        frame.origin.x = 0
-        frame.origin.y = frame.size.height * 1
-        scrollView.scrollRectToVisible(frame, animated: true)
-        
-        
-    }
-
-    
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
+        return true
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
     
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
-        let pickerLabel = UILabel()
-        let titleData = pickerData[row]
-        let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "Helvetica Neue", size: 30.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
-        let myTitle2 = NSAttributedString(string:  pickerData[0], attributes: [NSFontAttributeName:UIFont(name: "Helvetica Neue", size: 35.0)!,NSForegroundColorAttributeName:UIColor.whiteColor()])
-        if (titleData == "-----------------------"){
-            pickerLabel.attributedText = myTitle2
-        }else {
-            pickerLabel.attributedText = myTitle
+    
+    @IBAction func playTypeSelect(sender: UISegmentedControl) {
+    
+        switch sender.tag{
+        
+        case 1:
+          position = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+          positionSegment.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            
+        case 2:
+            playOccurrence = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+            playOccurrenceSegment.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            
+        case 3:
+            callType = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+            callTypeSegment.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+        
+        case 4:
+            playTypeSegment1.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playTypeSegment2.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playTypeSegment3.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playType = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+            playTypeSegment2.selectedSegmentIndex = -1
+            playTypeSegment3.selectedSegmentIndex = -1
+            
+        case 5:
+            playTypeSegment1.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playTypeSegment2.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playTypeSegment3.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playType = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+            playTypeSegment1.selectedSegmentIndex = -1
+            playTypeSegment3.selectedSegmentIndex = -1
+            
+        case 6:
+            playTypeSegment1.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playTypeSegment2.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playTypeSegment3.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            playType = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+            playTypeSegment1.selectedSegmentIndex = -1
+            playTypeSegment2.selectedSegmentIndex = -1
+            
+        case 7:
+            wasItCorrectSegment.tintColor = UIColor(red: 0.4, green: 0.4, blue: 0.4, alpha: 1.0)
+            wasItCorrect = "\(sender.titleForSegmentAtIndex(sender.selectedSegmentIndex)!)"
+            
+        default:
+        break
         }
-        pickerLabel.textAlignment = .Center
-        return pickerLabel
+        
     }
     
-    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
-        return 400
+    @IBAction func dismissView(sender: UIButton) {
+        
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            usingSpringWithDamping: 5.7,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: { [unowned self] in
+                self.transform = CGAffineTransformMakeScale(0.001,0.001)
+            }, completion: {
+                [unowned self] finished in
+                self.hidden = true
+                })
+        
+        resetMarkView()
     }
     
-    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 70.0
+    
+    
+   @IBAction func saveData() {
+        
+    if (position == "0"){
+        positionSegment.tintColor = UIColor ( red: 0.9801, green: 0.0, blue: 0.2995, alpha: 1.0 )
     }
     
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int)
-    {
-        // selected value in Uipickerview in Swift
-        let value = pickerData[row]
-        playType = value
+    if (playOccurrence == "0"){
+        playOccurrenceSegment.tintColor = UIColor ( red: 0.9801, green: 0.0, blue: 0.2995, alpha: 1.0 )
+    }
+    
+    if (callType == "0"){
+        callTypeSegment.tintColor = UIColor ( red: 0.9801, green: 0.0, blue: 0.2995, alpha: 1.0 )
+    }
+    
+    if (playType == "0"){
+        playTypeSegment1.tintColor = UIColor ( red: 0.9801, green: 0.0, blue: 0.2995, alpha: 1.0 )
+        playTypeSegment2.tintColor = UIColor ( red: 0.9801, green: 0.0, blue: 0.2995, alpha: 1.0 )
+        playTypeSegment3.tintColor = UIColor ( red: 0.9801, green: 0.0, blue: 0.2995, alpha: 1.0 )
+    }
+    
+    if (wasItCorrect == "0"){
+        wasItCorrectSegment.tintColor = UIColor ( red: 0.9854, green: 0.0, blue: 0.0862, alpha: 1.0 )
+    }
+    
+    if (position == "0" || playOccurrence == "0" || callType == "0" || playType == "0" || wasItCorrect == "0"){
+        return
+    }
+    
+    
+    
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context : NSManagedObjectContext = appDelegate.managedObjectContext
+        let en = NSEntityDescription.entityForName("PlayInfo", inManagedObjectContext: context)
+        let play = PlayData(entity: en!, insertIntoManagedObjectContext: context)
+         
+        play.play = "\(position)" + "+" + "\(playOccurrence)" + "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)" + "+" + "\(gameName)"
+    
+        do{
+            try context.save()
+        }
+        catch{
+            print("Could not save info to the database!")
+        }
+    
+    UIView.animateWithDuration(0.3,
+        delay: 0,
+        usingSpringWithDamping: 5.7,
+        initialSpringVelocity: 0.5,
+        options: UIViewAnimationOptions.CurveEaseInOut,
+        animations: { [unowned self] in
+            self.transform = CGAffineTransformMakeScale(0.001,0.001)
+        }, completion: {
+            [unowned self] finished in
+            self.hidden = true
+        })
+    
+        setStats()
+        resetMarkView()
+    
+    
+    }
+    
+    func setStats(){
+        
+        var locations  = [PlayData]()
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context : NSManagedObjectContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "PlayInfo")
+        do{
+            locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
+        } catch{}
+        // Then you can use your propertys.
+        
+        
+    }
+ 
+    
+    
+    func resetMarkView() {
+        
+        gameName = "0"
+        position = "0"
+        playType = "0"
+        callType = "0"
+        playOccurrence = "0"
+        wasItCorrect = "0"
+        comments = "0"
+        
+        playTypeSegment1.selectedSegmentIndex = -1
+        playTypeSegment2.selectedSegmentIndex = -1
+        playTypeSegment3.selectedSegmentIndex = -1
+        positionSegment.selectedSegmentIndex = -1
+        playOccurrenceSegment.selectedSegmentIndex = -1
+        callTypeSegment.selectedSegmentIndex = -1
+        wasItCorrectSegment.selectedSegmentIndex = -1
+        commentsTextField.text = ""
         
     }
     
@@ -129,6 +285,16 @@ class MarkView: UIView, UIPickerViewDelegate, UIPickerViewDataSource {
     
     
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
     
     
     

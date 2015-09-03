@@ -21,11 +21,15 @@
 		7C7F48CD1B84988E0056242D /* StatView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7C7F48CC1B84988E0056242D /* StatView.xib */; };
 		7C7F48CF1B8498E60056242D /* StatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F48CE1B8498E60056242D /* StatView.swift */; };
 		7C8F66A31B45750D001CEAD3 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8F66A21B45750D001CEAD3 /* MainViewController.swift */; };
-		7C96707A1B708C8B00CD78A3 /* StatsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C9670791B708C8B00CD78A3 /* StatsViewController.swift */; };
 		7C99FA5C1B80067900231EC5 /* DownloadProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C99FA5B1B80067900231EC5 /* DownloadProgressView.swift */; };
 		7CA863771B706BAE004D6668 /* MarkViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA863761B706BAE004D6668 /* MarkViewController.swift */; };
 		7CB8A6891B82221B0060F603 /* PlayDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7CB8A6871B82221B0060F603 /* PlayDataModel.xcdatamodeld */; };
+		7CF44BDA1B97916600B91A19 /* StatCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF44BD81B97916600B91A19 /* StatCollectionViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		7CF44BDB1B97916600B91A19 /* StatCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7CF44BD91B97916600B91A19 /* StatCollectionViewCell.xib */; settings = {ASSET_TAGS = (); }; };
+		7CF44BDF1B97B41C00B91A19 /* DataForDisplay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF44BDE1B97B41C00B91A19 /* DataForDisplay.swift */; settings = {ASSET_TAGS = (); }; };
 		7CFC03101B70F0E4007FAB2C /* PlayData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC030F1B70F0E4007FAB2C /* PlayData.swift */; };
+		7CFEDE621B8C7BF500B5127C /* PopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFEDE601B8C7BF500B5127C /* PopViewController.swift */; };
+		7CFEDE631B8C7BF500B5127C /* PopViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7CFEDE611B8C7BF500B5127C /* PopViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,11 +71,15 @@
 		7C7F48CC1B84988E0056242D /* StatView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StatView.xib; sourceTree = "<group>"; };
 		7C7F48CE1B8498E60056242D /* StatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatView.swift; sourceTree = "<group>"; };
 		7C8F66A21B45750D001CEAD3 /* MainViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MainViewController.swift; path = ../MainViewController.swift; sourceTree = "<group>"; };
-		7C9670791B708C8B00CD78A3 /* StatsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatsViewController.swift; sourceTree = "<group>"; };
 		7C99FA5B1B80067900231EC5 /* DownloadProgressView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadProgressView.swift; sourceTree = "<group>"; };
 		7CA863761B706BAE004D6668 /* MarkViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkViewController.swift; sourceTree = "<group>"; };
 		7CB8A6881B82221B0060F603 /* PlayDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PlayDataModel.xcdatamodel; sourceTree = "<group>"; };
+		7CF44BD81B97916600B91A19 /* StatCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StatCollectionViewCell.swift; path = ../StatCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CF44BD91B97916600B91A19 /* StatCollectionViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = StatCollectionViewCell.xib; path = ../StatCollectionViewCell.xib; sourceTree = "<group>"; };
+		7CF44BDE1B97B41C00B91A19 /* DataForDisplay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataForDisplay.swift; sourceTree = "<group>"; };
 		7CFC030F1B70F0E4007FAB2C /* PlayData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayData.swift; sourceTree = "<group>"; };
+		7CFEDE601B8C7BF500B5127C /* PopViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopViewController.swift; sourceTree = "<group>"; };
+		7CFEDE611B8C7BF500B5127C /* PopViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PopViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -134,13 +142,13 @@
 				7C0B7C8F1B4573E100228171 /* AppDelegate.swift */,
 				7CFC030F1B70F0E4007FAB2C /* PlayData.swift */,
 				7CA863761B706BAE004D6668 /* MarkViewController.swift */,
-				7C9670791B708C8B00CD78A3 /* StatsViewController.swift */,
 				7C7245CC1B7FC61E0017AFA5 /* DownloadViewController.swift */,
 				7C0444581B793862000312E3 /* ProgressView.swift */,
 				7C99FA5B1B80067900231EC5 /* DownloadProgressView.swift */,
 				7C5358451B82D3360013CC0E /* StatsProgressView.swift */,
 				7C8F66A21B45750D001CEAD3 /* MainViewController.swift */,
 				7C0B7C931B4573E100228171 /* Main.storyboard */,
+				7CFEDE641B8C7BFA00B5127C /* Pop View */,
 				7C04DF7B1B85861C007FC32F /* MarkView */,
 				7C7F48D01B8499560056242D /* StatsView */,
 				7C0B7C961B4573E100228171 /* Assets.xcassets */,
@@ -175,8 +183,20 @@
 			children = (
 				7C7F48CE1B8498E60056242D /* StatView.swift */,
 				7C7F48CC1B84988E0056242D /* StatView.xib */,
+				7CF44BD81B97916600B91A19 /* StatCollectionViewCell.swift */,
+				7CF44BD91B97916600B91A19 /* StatCollectionViewCell.xib */,
+				7CF44BDE1B97B41C00B91A19 /* DataForDisplay.swift */,
 			);
 			name = StatsView;
+			sourceTree = "<group>";
+		};
+		7CFEDE641B8C7BFA00B5127C /* Pop View */ = {
+			isa = PBXGroup;
+			children = (
+				7CFEDE601B8C7BF500B5127C /* PopViewController.swift */,
+				7CFEDE611B8C7BF500B5127C /* PopViewController.xib */,
+			);
+			name = "Pop View";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -284,7 +304,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7CFEDE631B8C7BF500B5127C /* PopViewController.xib in Resources */,
 				7C7F48CD1B84988E0056242D /* StatView.xib in Resources */,
+				7CF44BDB1B97916600B91A19 /* StatCollectionViewCell.xib in Resources */,
 				7C04DF7D1B858634007FC32F /* MarkView.xib in Resources */,
 				7C0B7C9A1B4573E100228171 /* LaunchScreen.storyboard in Resources */,
 				7C0B7C971B4573E100228171 /* Assets.xcassets in Resources */,
@@ -317,11 +339,13 @@
 				7CB8A6891B82221B0060F603 /* PlayDataModel.xcdatamodeld in Sources */,
 				7CFC03101B70F0E4007FAB2C /* PlayData.swift in Sources */,
 				7C99FA5C1B80067900231EC5 /* DownloadProgressView.swift in Sources */,
+				7CF44BDA1B97916600B91A19 /* StatCollectionViewCell.swift in Sources */,
 				7CA863771B706BAE004D6668 /* MarkViewController.swift in Sources */,
 				7C0B7C901B4573E100228171 /* AppDelegate.swift in Sources */,
 				7C5358461B82D3360013CC0E /* StatsProgressView.swift in Sources */,
+				7CF44BDF1B97B41C00B91A19 /* DataForDisplay.swift in Sources */,
 				7C0444591B793862000312E3 /* ProgressView.swift in Sources */,
-				7C96707A1B708C8B00CD78A3 /* StatsViewController.swift in Sources */,
+				7CFEDE621B8C7BF500B5127C /* PopViewController.swift in Sources */,
 				7C7245CD1B7FC61E0017AFA5 /* DownloadViewController.swift in Sources */,
 				7C8F66A31B45750D001CEAD3 /* MainViewController.swift in Sources */,
 				7C04DF7F1B85864A007FC32F /* MarkView.swift in Sources */,
@@ -415,7 +439,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -454,7 +478,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = 2;

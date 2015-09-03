@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8173.3" systemVersion="15A263e" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="EJ5-Z7-kja">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8187.4" systemVersion="15A279b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" initialViewController="EJ5-Z7-kja">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8142"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8151.3"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="AvenirNext.ttc">
@@ -19,14 +20,6 @@
             <string>HelveticaNeue-CondensedBold</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueLights.ttc">
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
-            <string>HelveticaNeue-Thin</string>
             <string>HelveticaNeue-Thin</string>
         </mutableArray>
     </customFonts>
@@ -94,7 +87,7 @@
                                 <animations/>
                                 <state key="normal" title="Button" image="markplay"/>
                                 <connections>
-                                    <segue destination="DIN-tp-9w6" kind="modal" identifier="mark" modalPresentationStyle="pageSheet" id="t9F-Ja-hIE"/>
+                                    <action selector="showMarkView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="CeS-Cg-e3N"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="jRG-Bp-VF7" userLabel="FF">
@@ -324,7 +317,7 @@
                                             <color key="titleColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="viewStats:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="snb-Ro-3GY"/>
+                                            <action selector="showStatView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="FuJ-6d-yox"/>
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="h5s-BX-mqK">
@@ -386,6 +379,12 @@
                                 </subviews>
                                 <animations/>
                             </view>
+                            <view contentMode="scaleToFill" id="f2w-r4-Xaj" customClass="MarkView" customModule="Game_Replay" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="138" width="1024" height="537"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                            </view>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="32S-Y7-hhn">
                                 <rect key="frame" x="0.0" y="699" width="1029" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -418,7 +417,7 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
-                            <view contentMode="scaleToFill" id="f2w-r4-Xaj" customClass="MarkView" customModule="Game_Replay" customModuleProvider="target">
+                            <view contentMode="scaleToFill" id="APY-Qs-Sei" customClass="StatView" customModule="Game_Replay" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="900" width="1024" height="768"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
@@ -447,6 +446,7 @@
                         <outlet property="headerView" destination="UBQ-HZ-7cK" id="tJM-G2-KU9"/>
                         <outlet property="importButton" destination="h5s-BX-mqK" id="dKW-ba-T37"/>
                         <outlet property="markPlayButton" destination="eiK-Pf-3hB" id="OeP-WZ-1ZE"/>
+                        <outlet property="markView" destination="f2w-r4-Xaj" id="IrS-ec-h9J"/>
                         <outlet property="pauseButton" destination="7lt-s1-U3O" id="X0g-ov-cDc"/>
                         <outlet property="playButton" destination="LQB-dD-7N7" id="ZjM-r0-zOi"/>
                         <outlet property="playerScrollView" destination="juB-Ys-Q7F" id="WLE-89-eRK"/>
@@ -457,8 +457,8 @@
                         <outlet property="saveAndEmail" destination="hlu-z8-UZs" id="7ba-0k-lY3"/>
                         <outlet property="saveClip" destination="ByB-OP-wCf" id="V7g-9T-5MX"/>
                         <outlet property="startOver" destination="UJO-Z3-oEd" id="vey-yS-FBc"/>
+                        <outlet property="statView" destination="APY-Qs-Sei" id="Dqh-k7-gpo"/>
                         <outlet property="statsButton" destination="WzG-1O-qbW" id="AxW-Cu-pXw"/>
-                        <outlet property="statsView" destination="f2w-r4-Xaj" id="jsU-gN-JeL"/>
                         <outlet property="stepBack" destination="LGI-D8-uFc" id="hBv-bq-Lu1"/>
                         <outlet property="stepOne" destination="yfB-oN-1iA" id="fdX-4h-RCB"/>
                         <outlet property="totalTimeLabel" destination="VHB-or-ggk" id="bY0-Zo-OM0"/>
@@ -468,197 +468,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZVb-h0-cpl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1347" y="72"/>
-        </scene>
-        <!--Stats View Controller-->
-        <scene sceneID="L5u-fU-ihn">
-            <objects>
-                <viewController id="8dY-DO-e5M" customClass="StatsViewController" customModule="Game_Replay" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="IYl-16-cTC">
-                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" id="Vww-1T-e4i" customClass="StatView" customModule="Game_Replay" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                        </subviews>
-                        <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="1024" height="768"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Fyd-Yw-8FF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2522" y="72"/>
-        </scene>
-        <!--Mark View Controller-->
-        <scene sceneID="laC-nu-XEc">
-            <objects>
-                <viewController storyboardIdentifier="MarkViewController" id="DIN-tp-9w6" customClass="MarkViewController" customModule="Game_Replay" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="DSY-5Y-cK6">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="748"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" pagingEnabled="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" id="SGj-5N-xWh">
-                                <rect key="frame" x="39" y="104" width="691" height="600"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <view contentMode="scaleToFill" id="KmO-5v-bpN" userLabel="Page3">
-                                        <rect key="frame" x="1384" y="0.0" width="692" height="600"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Did you get the play right?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="cva-uL-hnj">
-                                                <rect key="frame" x="15" y="149" width="662" height="67"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="45"/>
-                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="NHv-1a-OYO">
-                                                <rect key="frame" x="15" y="237" width="662" height="63"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="40"/>
-                                                <state key="normal" title="Yes">
-                                                    <color key="titleColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="markIsCallCorrect:" destination="DIN-tp-9w6" eventType="touchUpInside" id="tOS-T8-amv"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="IKz-lh-mos">
-                                                <rect key="frame" x="15" y="308" width="662" height="63"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="40"/>
-                                                <state key="normal" title="No">
-                                                    <color key="titleColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="markIsCallCorrect:" destination="DIN-tp-9w6" eventType="touchUpInside" id="hRU-EL-jaF"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <animations/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" id="tUD-gX-NOw" userLabel="Page2">
-                                        <rect key="frame" x="692" y="0.0" width="692" height="600"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <pickerView contentMode="scaleToFill" id="tng-Mq-riS">
-                                                <rect key="frame" x="0.0" y="165" width="684" height="216"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                            </pickerView>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What type of play was this?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PIn-Uq-ZbZ">
-                                                <rect key="frame" x="15" y="122" width="662" height="67"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="45"/>
-                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                        </subviews>
-                                        <animations/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                    <view contentMode="scaleToFill" id="9nb-Hq-00t" userLabel="Page1">
-                                        <rect key="frame" x="0.0" y="0.0" width="692" height="600"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Are you at Trail, Lead, or Center?" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="H1z-ao-Rl7">
-                                                <rect key="frame" x="15" y="129" width="662" height="67"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="45"/>
-                                                <color key="textColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="FBO-Pi-Z3T">
-                                                <rect key="frame" x="15" y="211" width="662" height="63"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="40"/>
-                                                <state key="normal" title="Trail">
-                                                    <color key="titleColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="markPosition:" destination="DIN-tp-9w6" eventType="touchUpInside" id="BvW-6I-xmX"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="W2q-IU-8As">
-                                                <rect key="frame" x="15" y="268" width="662" height="63"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="40"/>
-                                                <state key="normal" title="Lead">
-                                                    <color key="titleColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="markPosition:" destination="DIN-tp-9w6" eventType="touchUpInside" id="QXB-U4-346"/>
-                                                </connections>
-                                            </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="MCg-UU-pCu">
-                                                <rect key="frame" x="22" y="334" width="662" height="63"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <animations/>
-                                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="40"/>
-                                                <state key="normal" title="Center">
-                                                    <color key="titleColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <connections>
-                                                    <action selector="markPosition:" destination="DIN-tp-9w6" eventType="touchUpInside" id="2BZ-Pw-xQD"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                        <animations/>
-                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </view>
-                                </subviews>
-                                <animations/>
-                            </scrollView>
-                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" id="hnQ-K1-FaC">
-                                <rect key="frame" x="364" y="650" width="39" height="37"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                                <color key="pageIndicatorTintColor" red="0.80000001190000003" green="0.80000001190000003" blue="0.80000001190000003" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="currentPageIndicatorTintColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
-                            </pageControl>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="ns8-eI-JdU">
-                                <rect key="frame" x="617" y="32" width="131" height="44"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
-                                <state key="normal" title="Cancel">
-                                    <color key="titleColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="back:" destination="DIN-tp-9w6" eventType="touchUpInside" id="RXm-rQ-F6c"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                        <animations/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" id="AT0-Ix-3x4"/>
-                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
-                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-                    <size key="freeformSize" width="768" height="748"/>
-                    <connections>
-                        <outlet property="pageControl" destination="hnQ-K1-FaC" id="hnw-mN-eKB"/>
-                        <outlet property="playPicker" destination="tng-Mq-riS" id="ozX-bP-Inc"/>
-                        <outlet property="scrollView" destination="SGj-5N-xWh" id="w8P-SY-5IK"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Pwi-ob-3Tr" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1227" y="1049"/>
+            <point key="canvasLocation" x="1879" y="72"/>
         </scene>
         <!--Download View Controller-->
         <scene sceneID="SVL-3E-YvK">
@@ -828,7 +638,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="udS-bo-mIh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2431" y="1049"/>
+            <point key="canvasLocation" x="3072" y="72"/>
         </scene>
     </scenes>
     <resources>
