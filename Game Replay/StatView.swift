@@ -16,33 +16,37 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet weak var switchViewSegment: UISegmentedControl!
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var playCount: UILabel!
+    @IBOutlet weak var correctCount: UILabel!
     @IBOutlet weak var gamePercentage: UILabel!
     @IBOutlet weak var noDataHeader: UILabel!
     @IBOutlet weak var noDataMessage: UILabel!
-    
+    @IBOutlet weak var overallStatView: OverallStatsView!
+    @IBOutlet weak var gameNameLabel: UILabel!
   
-    var scrollHeight: Float = 0.0
-    var collectionHeight: Float = 0.0
-    var i = 0
     var data = DataForDisplay()
+    var informationForBarGraph = [String]()
+    var graphInfo = [String]()
+    var detailInfo = [String]()
+    var collectionHeight: Float = 0.0
+    var scrollHeight: Float = 0.0
+    var countTotal = 0
+    var countCorrectTotal = 0
     
     var view: UIView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         xibSetup()
-        print("Intit....")
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         xibSetup()
-        print("Intit....")
     }
     
     func xibSetup() {
         count()
-        data.setItemsToDisplay()
+        data.setItemsToDisplayForGame()
         if(data.items_to_display.isEmpty){
             data.numberOfItems = 1
             
@@ -67,20 +71,22 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         collectionView.registerNib(UINib(nibName: "StatCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "cell")
         collectionView.frame.size.height = CGFloat(collectionHeight / 2)
         scrollView.contentSize = CGSize(width: 1024, height: CGFloat(scrollHeight / 2))
-        playCount.text = "\(i)"
+        playCount.text = "\(countTotal)"
+        correctCount.text = "\(countCorrectTotal)"
         gamePercentage.text = NSString(format: "%.0f%@", Float(data.totalCorrectForGame) / Float(data.totalCountForGame) * 100, "%") as String
         if(data.items_to_display.isEmpty){
             
         noDataHeader.hidden = false
         noDataMessage.hidden = false
-        gamePercentage.text = NSString(format: "%.0f%@", 0 * 100, "%") as String
+        gamePercentage.text = "0%"
             
         }else
         {
             noDataHeader.hidden = true
             noDataMessage.hidden = true
         }
-        
+        overallStatView.hidden = true
+        gameNameLabel.text = gameNameForData
         addSubview(view)
         
     }
@@ -106,9 +112,16 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
         } catch{}
         
-               for _ in locations {
-            i++
+               for location in locations {
+                if (location.play.componentsSeparatedByString("+")[4] == "YES" && location.play.componentsSeparatedByString("+")[6] == gameFile){
+                    countCorrectTotal++
+                }
+                if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
+                    countTotal++
+                }
         }
+        
+
         
         
         
@@ -124,10 +137,6 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
                 animations: { [unowned self] in
                     self.frame.origin.y = 900
                 }, completion: nil)
-
-//        data.reset()
-//        i = 0
-//        xibSetup()
 
     }
     
@@ -145,8 +154,9 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             
         let title = cell.viewWithTag(1) as! UILabel
         let percentage = cell.viewWithTag(2) as! UILabel
-        let correctCalls = cell.viewWithTag(3) as! UILabel
-        let totalCalls = cell.viewWithTag(4) as! UILabel
+        //let correctCalls = cell.viewWithTag(3) as! UILabel
+        //let totalCalls = cell.viewWithTag(4) as! UILabel
+        let labelDetail = cell.viewWithTag(5) as! UILabel
         
         var t = ""
         var tCall: Float = 0.0
@@ -373,9 +383,9 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     
         title.text = t
         percentage.text = NSString(format: "%.0f%@", p * 100, "%") as String
-        correctCalls.text = "\(Int(cCall))"
-        totalCalls.text = "\(Int(tCall))"
-        
+        //correctCalls.text = "\(Int(cCall))"
+        //totalCalls.text = "\(Int(tCall))"
+        labelDetail.text = " You had \(Int(cCall)) correct calls out of \(Int(tCall))"
             
     
         return cell
@@ -397,10 +407,10 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             
         case 0:
            print("Current Game")
-            
+            overallStatView.hidden = true
         case 1:
             print("Overall Stats")
-            
+            overallStatView.hidden = false
         case 2:
             print("Tendencies")
             
@@ -413,8 +423,9 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
 
     override func awakeFromNib() {
         data.reset()
-        i = 0
         xibSetup()
+        countTotal = 0
+        countCorrectTotal = 0
     }
     
     

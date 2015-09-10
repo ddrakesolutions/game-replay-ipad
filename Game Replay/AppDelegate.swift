@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(application: UIApplication, supportedInterfaceOrientationsForWindow window: UIWindow?) -> UIInterfaceOrientationMask {
         
-        if self.window?.rootViewController?.presentedViewController is UIImagePickerController || self.window?.rootViewController?.presentedViewController is MarkViewController {
+        if self.window?.rootViewController?.presentedViewController is UIImagePickerController {
             return UIInterfaceOrientationMask.Landscape
         } else {
         return UIInterfaceOrientationMask.Landscape

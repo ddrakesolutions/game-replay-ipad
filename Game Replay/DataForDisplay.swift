@@ -109,11 +109,8 @@ class DataForDisplay: NSObject {
     
     
     
-    
-    
-    
-    func setItemsToDisplay(){
-    
+    func setItemsToDisplayForGame(){
+        
         var locations  = [PlayData]()
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
@@ -124,33 +121,54 @@ class DataForDisplay: NSObject {
             locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
         } catch{}
         
-
-     
+    
+        
         for location in locations {
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
             items.append(location.play.componentsSeparatedByString("+")[0] as String)
+            }
         }
         
         for location in locations {
-            items.append(location.play.componentsSeparatedByString("+")[1] as String)        }
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
+            items.append(location.play.componentsSeparatedByString("+")[1] as String)
+            }
+        }
+            
         
         for location in locations {
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
             items.append(location.play.componentsSeparatedByString("+")[2] as String)
+            }
         }
         
         for location in locations {
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
             items.append(location.play.componentsSeparatedByString("+")[3] as String)
+            }
         }
         
         for location in locations {
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
             items.append(location.play.componentsSeparatedByString("+")[4] as String)
+            }
         }
+        
+        for location in locations {
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
+            items.append(location.play.componentsSeparatedByString("+")[5] as String)
+            }
+        }
+        
+        
         
         
         for item in items {
             
+        
             
             if(!items_to_display.contains(item)){
-               
+                
                 
                 if(item.containsString("TRAIL")){
                     items_to_display.append(item)
@@ -259,13 +277,17 @@ class DataForDisplay: NSObject {
                 
                 
                 
-                }
-            
-            
-        }
+            }
+        
+        
+        
+    }
         
         //--------------------------------------Count Each Position--------------------------------------------//
         for location in locations {
+            
+            if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
+            
             //=================POSITION========================//
             if(location.play.componentsSeparatedByString("+")[0] == "TRAIL") {
                 trailCount++
@@ -324,7 +346,7 @@ class DataForDisplay: NSObject {
                     totalCorrectForGame++
                 }
             }
-
+            
             
             //=================CALL TYPE========================//
             
@@ -521,13 +543,430 @@ class DataForDisplay: NSObject {
                     totalCorrectForGame++
                 }
             }
-         
+        }
+            
+            
             
         }
-    
         
-}
+        
+    }
     
+    func setItemsToDisplayForOverall(){
+        
+        var locations  = [PlayData]()
+        
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let context : NSManagedObjectContext = appDelegate.managedObjectContext
+        
+        let fetchRequest = NSFetchRequest(entityName: "PlayInfo")
+        do{
+            locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
+        } catch{}
+        
+        
+        
+        for location in locations {
+            items.append(location.play.componentsSeparatedByString("+")[0] as String)
+        }
+        
+        for location in locations {
+            items.append(location.play.componentsSeparatedByString("+")[1] as String)        }
+        
+        for location in locations {
+            items.append(location.play.componentsSeparatedByString("+")[2] as String)
+        }
+        
+        for location in locations {
+            items.append(location.play.componentsSeparatedByString("+")[3] as String)
+        }
+        
+        for location in locations {
+            items.append(location.play.componentsSeparatedByString("+")[4] as String)
+        }
+        
+        
+        for item in items {
+            
+            
+            if(!items_to_display.contains(item)){
+                
+                
+                if(item.containsString("TRAIL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("CENTER")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("LEAD")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("PERIMETER")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("POST")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("TRANSITION")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("ON BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("OFF BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("SCREEN")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("OUT OF BOUNDS")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("SHOT CLOCK")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("10 SECONDS")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("DOUBLE DRIBBLE")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("BLOCK/CHARGE")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("KICK BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("JUMP BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("TRAVELING")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("FREE THROW")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("THROW IN")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("BACK COURT")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("SHOOTING")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("ARM BAR")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("RA/LDB")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("REBOUND")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("HAND CHECK")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("HELD BALL")){
+                    items_to_display.append(item)
+                }
+                
+                
+                
+                
+            }
+            
+            
+        }
+        
+        //--------------------------------------Count Each Position--------------------------------------------//
+        for location in locations {
+            //=================POSITION========================//
+            if(location.play.componentsSeparatedByString("+")[0] == "TRAIL") {
+                trailCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    trailCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[0] == "CENTER") {
+                centerCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    centerCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[0] == "LEAD") {
+                leadCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    leadCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            
+            //=================PLAY OCCURRANCE========================//
+            
+            
+            if(location.play.componentsSeparatedByString("+")[1] == "PERIMETER") {
+                perimeterCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    perimeterCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[1] == "POST") {
+                postCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    postCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[1] == "TRANSITION") {
+                transitionCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    transitionCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            
+            //=================CALL TYPE========================//
+            
+            
+            if(location.play.componentsSeparatedByString("+")[2] == "ON BALL") {
+                onBallCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    onBallCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[2] == "OFF BALL") {
+                offBallCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    offBallCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[2] == "NO CALL") {
+                noCallCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    noCallCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            
+            //=================PLAY TYPE========================//
+            
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "SCREEN") {
+                screenCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    screenCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "OUT OF BOUNDS") {
+                outOfBoundsCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    outOfBoundsCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "SHOT CLOCK") {
+                shotClockCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    shotClockCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "10 SECONDS") {
+                tenSecondsCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    tenSecondsCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "DOUBLE DRIBBLE") {
+                doubleDribbleCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    doubleDribbleCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "BLOCK/CHARGE") {
+                blockChargeCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    blockChargeCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "KICK BALL") {
+                kickBallCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    kickBallCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "JUMP BALL") {
+                jumpBallCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    jumpBallCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "TRAVELING") {
+                travelingCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    travelingCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "FREE THROW") {
+                freeThrowCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    freeThrowCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "THROW IN") {
+                throwInCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    throwInCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "BACK COURT") {
+                backCourtCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    backCourtCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "SHOOTING") {
+                shootingCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    shootingCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "ARM BAR") {
+                armBarCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    armBarCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "RA/LDB") {
+                RACount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    RACorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "REBOUND") {
+                reboundCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    reboundCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "HAND CHECK") {
+                handCheckCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    handCheckCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "HELD BALL") {
+                heldBallCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    heldBallCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            
+        }
+        
+        
+    }
     
     
     func reset() {

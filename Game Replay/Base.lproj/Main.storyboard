@@ -13,8 +13,8 @@
         </mutableArray>
         <mutableArray key="HelveticaNeue.ttc">
             <string>HelveticaNeue</string>
-            <string>HelveticaNeue-Medium</string>
-            <string>HelveticaNeue-Medium</string>
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue</string>
         </mutableArray>
         <mutableArray key="HelveticaNeueExtras.ttc">
             <string>HelveticaNeue-CondensedBold</string>
@@ -32,8 +32,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="color" id="Bga-3y-2Ez">
-                                <rect key="frame" x="0.0" y="138" width="1024" height="562"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="basketball-bg" id="Bga-3y-2Ez">
+                                <rect key="frame" x="0.0" y="-6" width="1024" height="774"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                             </imageView>
@@ -41,25 +41,28 @@
                                 <rect key="frame" x="0.0" y="138" width="1024" height="562"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" id="W1p-Y5-OKP">
+                                    <visualEffectView opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" id="W1p-Y5-OKP">
                                         <rect key="frame" x="0.0" y="0.0" width="1024" height="562"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="8Pz-jQ-bn2">
                                             <rect key="frame" x="0.0" y="0.0" width="1024" height="562"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <animations/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <blurEffect style="extraLight"/>
                                     </visualEffectView>
                                 </subviews>
                                 <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <connections>
                                     <outlet property="delegate" destination="EJ5-Z7-kja" id="dxO-OV-IVP"/>
                                 </connections>
                             </scrollView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" bouncesZoom="NO" id="JBQ-dR-7KX">
-                                <rect key="frame" x="0.0" y="138" width="1024" height="768"/>
+                                <rect key="frame" x="0.0" y="138" width="1024" height="562"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" id="ifC-Np-DaH">
@@ -70,6 +73,12 @@
                                 </subviews>
                                 <animations/>
                             </scrollView>
+                            <view contentMode="scaleToFill" id="53v-4Z-Bcc" customClass="DrawView" customModule="Game_Replay" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="138" width="1024" height="562"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="yfB-oN-1iA">
                                 <rect key="frame" x="920" y="310" width="75" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -85,7 +94,7 @@
                                 <rect key="frame" x="20" y="420" width="75" height="75"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
-                                <state key="normal" title="Button" image="markplay"/>
+                                <state key="normal" title="Button" image="flag"/>
                                 <connections>
                                     <action selector="showMarkView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="CeS-Cg-e3N"/>
                                 </connections>
@@ -130,7 +139,7 @@
                                 <animations/>
                                 <state key="normal" image="play"/>
                                 <connections>
-                                    <action selector="playVideo:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="kd1-dm-Xfx"/>
+                                    <action selector="playVideo" destination="EJ5-Z7-kja" eventType="touchUpInside" id="eRw-kp-V6g"/>
                                 </connections>
                             </button>
                             <button autoresizesSubviews="NO" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="7lt-s1-U3O">
@@ -142,109 +151,6 @@
                                     <action selector="pauseVideo" destination="EJ5-Z7-kja" eventType="touchUpInside" id="jmX-gL-E3y"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" id="0Xt-xr-2EE" customClass="ProgressView" customModule="Game_Replay" customModuleProvider="target">
-                                <rect key="frame" x="400" y="280" width="262" height="223"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <animations/>
-                            </view>
-                            <view contentMode="scaleToFill" id="EQZ-Hl-Hi1">
-                                <rect key="frame" x="280" y="200" width="475" height="299"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <subviews>
-                                    <visualEffectView opaque="NO" contentMode="scaleToFill" id="wZg-yb-CL5">
-                                        <rect key="frame" x="0.0" y="0.0" width="475" height="299"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="GXI-qQ-Uje">
-                                            <rect key="frame" x="0.0" y="0.0" width="475" height="299"/>
-                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                            <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="O1J-xa-Kzb">
-                                                    <rect key="frame" x="54" y="0.0" width="150" height="150"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <state key="normal" title="Email" image="edit_mode3"/>
-                                                    <connections>
-                                                        <action selector="emailClip:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="imB-fV-I0e"/>
-                                                    </connections>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hlu-z8-UZs">
-                                                    <rect key="frame" x="269" y="0.0" width="150" height="150"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <state key="normal" title="Email and Save" image="edit_mode3"/>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ByB-OP-wCf">
-                                                    <rect key="frame" x="54" y="138" width="150" height="150"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <state key="normal" title="Save Clip" image="edit_mode3"/>
-                                                </button>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UJO-Z3-oEd">
-                                                    <rect key="frame" x="270" y="138" width="150" height="150"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <state key="normal" title="Start Over" image="edit_mode3"/>
-                                                    <connections>
-                                                        <action selector="startover:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="EYo-Xy-Dnh"/>
-                                                    </connections>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="x93-Xa-dVt">
-                                                    <rect key="frame" x="107" y="64" width="41" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Over" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Qq3-rt-X00">
-                                                    <rect key="frame" x="306" y="202" width="79" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save Clip" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="0m9-YY-lbP">
-                                                    <rect key="frame" x="94" y="202" width="71" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Kcl-pc-GeR">
-                                                    <rect key="frame" x="325" y="45" width="37" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="&amp;" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ST2-IE-Ghg">
-                                                    <rect key="frame" x="337" y="64" width="12" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="xRt-Ga-SFu">
-                                                    <rect key="frame" x="324" y="84" width="41" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <animations/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <animations/>
-                                        </view>
-                                        <animations/>
-                                        <blurEffect style="extraLight"/>
-                                    </visualEffectView>
-                                </subviews>
-                                <animations/>
-                            </view>
                             <visualEffectView opaque="NO" contentMode="scaleToFill" id="PJM-yB-DTQ">
                                 <rect key="frame" x="0.0" y="699" width="1024" height="3"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -284,100 +190,155 @@
                                 <animations/>
                                 <blurEffect style="light"/>
                             </visualEffectView>
+                            <visualEffectView opaque="NO" alpha="0.94999999999999996" tag="1" contentMode="scaleToFill" id="eM3-Cp-Zjm">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="138"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="rG4-R3-3NB">
+                                    <rect key="frame" x="0.0" y="0.0" width="1024" height="138"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <animations/>
+                                </view>
+                                <animations/>
+                                <blurEffect style="extraLight"/>
+                            </visualEffectView>
                             <view tag="50" contentMode="scaleToFill" id="UBQ-HZ-7cK" userLabel="Header View">
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="138"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="OgC-lV-mQ5">
-                                        <rect key="frame" x="208" y="43" width="609" height="43"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" name="DevanagariSangamMN-Bold" family="Devanagari Sangam MN" pointSize="30"/>
-                                        <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="0Hd-G6-0Kz">
-                                        <rect key="frame" x="96" y="59" width="75" height="75"/>
+                                        <rect key="frame" x="91" y="58" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="27"/>
-                                        <state key="normal" title="Clip Video" image="edit_mode3">
+                                        <state key="normal" title="Clip Video" image="clipvideo">
                                             <color key="titleColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <action selector="editVideo:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="dmh-fT-Tz0"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WzG-1O-qbW">
-                                        <rect key="frame" x="169" y="59" width="75" height="75"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="27"/>
-                                        <state key="normal" title="Stats" image="edit_mode3">
-                                            <color key="titleColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="showStatView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="FuJ-6d-yox"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="h5s-BX-mqK">
-                                        <rect key="frame" x="20" y="59" width="75" height="75"/>
+                                        <rect key="frame" x="22" y="58" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="27"/>
-                                        <state key="normal" title="Import" image="edit_mode3">
+                                        <state key="normal" title="Import" image="select">
                                             <color key="titleColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
-                                            <action selector="selectVideo:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="6dx-yQ-6MS"/>
+                                            <action selector="selectVideo" destination="EJ5-Z7-kja" eventType="touchUpInside" id="OaO-Kw-8VG"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clip" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pMc-aI-2vj">
-                                        <rect key="frame" x="118" y="80" width="32" height="34"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TRIM" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="pMc-aI-2vj">
+                                        <rect key="frame" x="99" y="108" width="40" height="34"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="16"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Import" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GU4-6h-NqF">
-                                        <rect key="frame" x="36" y="80" width="45" height="34"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="16"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Stats" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DwR-OR-Ln5">
-                                        <rect key="frame" x="187" y="80" width="41" height="34"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="16"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="14"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="90c-kr-GeD">
-                                        <rect key="frame" x="941" y="59" width="75" height="75"/>
+                                        <rect key="frame" x="939" y="58" width="55" height="55"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="27"/>
-                                        <state key="normal" title="Stats" image="edit_mode3">
+                                        <state key="normal" title="Stats" image="download">
                                             <color key="titleColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
                                             <segue destination="aMX-kr-6G8" kind="modal" identifier="download" id="kaE-9b-mL9"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nSn-jo-aRE">
-                                        <rect key="frame" x="956" y="82" width="56" height="34"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DOWNLOAD" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="nSn-jo-aRE">
+                                        <rect key="frame" x="917" y="110" width="99" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="10"/>
-                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="15"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="WzG-1O-qbW">
+                                        <rect key="frame" x="162" y="58" width="55" height="55"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="27"/>
+                                        <state key="normal" title="Stats" image="stats-1">
+                                            <color key="titleColor" red="0.49803921579999999" green="0.49803921579999999" blue="0.49803921579999999" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="showStatView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="FuJ-6d-yox"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="STATS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="DwR-OR-Ln5">
+                                        <rect key="frame" x="166" y="108" width="49" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="14"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SELECT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="GU4-6h-NqF">
+                                        <rect key="frame" x="20" y="108" width="58" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="14"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="omO-zm-Iqd">
+                                        <rect key="frame" x="792" y="58" width="55" height="55"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <state key="normal" title="Button" image="markplay"/>
+                                        <connections>
+                                            <action selector="showHideDrawView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="Z2g-Oz-ecj"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="SGv-jK-rYA">
+                                        <rect key="frame" x="860" y="58" width="55" height="55"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <state key="normal" title="Button" image="clock"/>
+                                        <connections>
+                                            <action selector="showHideClockView:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="5Xl-KT-D0q"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CLOCK" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="mtU-gW-BxG">
+                                        <rect key="frame" x="865" y="108" width="49" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="14"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DRAW" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E6v-8d-gI5">
+                                        <rect key="frame" x="796" y="108" width="49" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="14"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="Fd8-Kc-dz5">
+                                        <rect key="frame" x="232" y="58" width="55" height="55"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <state key="normal" title="Button" image="clips"/>
+                                        <connections>
+                                            <action selector="insertClip:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="ODV-1o-R1b"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="CLIPS" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="5LN-AK-eDH">
+                                        <rect key="frame" x="235" y="108" width="49" height="34"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" name="DevanagariSangamMN" family="Devanagari Sangam MN" pointSize="14"/>
+                                        <color key="textColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="f2w-r4-Xaj" customClass="MarkView" customModule="Game_Replay" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="138" width="1024" height="537"/>
@@ -385,8 +346,19 @@
                                 <animations/>
                                 <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
+                            <visualEffectView opaque="NO" alpha="0.94999999999999996" contentMode="scaleToFill" id="PPs-L3-6zi">
+                                <rect key="frame" x="0.0" y="699" width="1024" height="70"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="7op-7t-GjY">
+                                    <rect key="frame" x="0.0" y="0.0" width="1024" height="70"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                    <animations/>
+                                </view>
+                                <animations/>
+                                <blurEffect style="extraLight"/>
+                            </visualEffectView>
                             <view clipsSubviews="YES" contentMode="scaleToFill" id="32S-Y7-hhn">
-                                <rect key="frame" x="0.0" y="699" width="1029" height="70"/>
+                                <rect key="frame" x="0.0" y="699" width="1024" height="70"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" id="Qs2-h2-xDU">
@@ -401,21 +373,21 @@
                                         <rect key="frame" x="931" y="24" width="76" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4ke-fz-dn7">
                                         <rect key="frame" x="31" y="24" width="70" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="17"/>
+                                        <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                                 <animations/>
-                                <color key="backgroundColor" red="0.90196079019999997" green="0.90196079019999997" blue="0.90196079019999997" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" id="APY-Qs-Sei" customClass="StatView" customModule="Game_Replay" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="900" width="1024" height="768"/>
@@ -423,9 +395,199 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
+                            <view contentMode="scaleToFill" id="mNp-Hu-ilS">
+                                <rect key="frame" x="438" y="136" width="147" height="126"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="startmarked" id="wSr-3q-mrM">
+                                        <rect key="frame" x="29" y="15" width="89" height="91"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                    </imageView>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="novideo" id="DWL-En-mWR">
+                                <rect key="frame" x="0.0" y="561" width="1024" height="139"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No videos to be displayed. You can add your games through iTunes." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3lX-aR-qLt">
+                                <rect key="frame" x="311" y="511" width="425" height="119"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="24"/>
+                                <color key="textColor" red="0.20000000300000001" green="0.20000000300000001" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view multipleTouchEnabled="YES" contentMode="scaleToFill" id="f0s-AB-afi">
+                                <rect key="frame" x="836" y="586" width="181" height="105"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <visualEffectView opaque="NO" alpha="0.80000000000000004" contentMode="scaleToFill" id="n2p-6J-baE">
+                                        <rect key="frame" x="0.0" y="0.0" width="181" height="105"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="v0H-7T-D4x">
+                                            <rect key="frame" x="0.0" y="0.0" width="181" height="105"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <animations/>
+                                        </view>
+                                        <animations/>
+                                        <blurEffect style="extraLight"/>
+                                    </visualEffectView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="30" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="clp-oI-reQ">
+                                        <rect key="frame" x="-7" y="26" width="195" height="68"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" weight="thin" pointSize="64"/>
+                                        <color key="textColor" red="0.17647058823529413" green="0.18431372549019609" blue="0.24705882352941178" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Double tap to reset" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="AOQ-0l-trw">
+                                        <rect key="frame" x="0.0" y="76" width="181" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
+                                        <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Throw In" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="HUF-bs-Uu3">
+                                        <rect key="frame" x="0.0" y="8" width="181" height="29"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="15"/>
+                                        <color key="textColor" red="0.40000000600000002" green="0.40000000600000002" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Swipe to change clock" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="whm-Ul-dvS">
+                                <rect key="frame" x="836" y="561" width="181" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <animations/>
+                                <fontDescription key="fontDescription" type="system" weight="light" pointSize="14"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <view contentMode="scaleToFill" id="EQZ-Hl-Hi1">
+                                <rect key="frame" x="-280" y="180" width="200" height="450"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <visualEffectView opaque="NO" contentMode="scaleToFill" id="wZg-yb-CL5">
+                                        <rect key="frame" x="0.0" y="0.0" width="200" height="450"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="GXI-qQ-Uje">
+                                            <rect key="frame" x="0.0" y="0.0" width="200" height="450"/>
+                                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="O1J-xa-Kzb">
+                                                    <rect key="frame" x="101" y="22" width="75" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <state key="normal" title="Email" image="email"/>
+                                                    <connections>
+                                                        <action selector="emailClip:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="imB-fV-I0e"/>
+                                                    </connections>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="ByB-OP-wCf">
+                                                    <rect key="frame" x="101" y="122" width="75" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <state key="normal" title="Save Clip" image="save"/>
+                                                </button>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="UJO-Z3-oEd">
+                                                    <rect key="frame" x="103" y="319" width="75" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <state key="normal" title="Start Over" image="startover"/>
+                                                    <connections>
+                                                        <action selector="startover:" destination="EJ5-Z7-kja" eventType="touchUpInside" id="EYo-Xy-Dnh"/>
+                                                    </connections>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="zRd-Tu-vj9">
+                                                    <rect key="frame" x="118" y="95" width="41" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Save" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="IjR-KS-5Yd">
+                                                    <rect key="frame" x="120" y="192" width="37" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Start Over" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EnX-DU-QcH">
+                                                    <rect key="frame" x="101" y="391" width="79" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="hlu-z8-UZs">
+                                                    <rect key="frame" x="103" y="219" width="75" height="75"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <state key="normal" title="Email and Save" image="emailsave2"/>
+                                                </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Email &amp; Save" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VWJ-aP-qq2">
+                                                    <rect key="frame" x="91" y="291" width="99" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" red="0.29803922770000002" green="0.29803922770000002" blue="0.29803922770000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                        </view>
+                                        <animations/>
+                                        <blurEffect style="extraLight"/>
+                                    </visualEffectView>
+                                </subviews>
+                                <animations/>
+                            </view>
+                            <view contentMode="scaleToFill" id="62c-E2-gUl">
+                                <rect key="frame" x="-350" y="138" width="309" height="562"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="91" sectionHeaderHeight="28" sectionFooterHeight="28" id="01Q-bX-pNO">
+                                        <rect key="frame" x="53" y="0.0" width="256" height="562"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <animations/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="sectionIndexBackgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <prototypes>
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="cell" rowHeight="91" id="fuS-6x-fOF">
+                                                <rect key="frame" x="0.0" y="28" width="256" height="91"/>
+                                                <autoresizingMask key="autoresizingMask"/>
+                                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fuS-6x-fOF" id="leF-op-Vcc">
+                                                    <rect key="frame" x="0.0" y="0.0" width="256" height="90.5"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <animations/>
+                                                </tableViewCellContentView>
+                                                <animations/>
+                                            </tableViewCell>
+                                        </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="EJ5-Z7-kja" id="BrQ-GJ-bRN"/>
+                                            <outlet property="delegate" destination="EJ5-Z7-kja" id="3Gj-Eb-Uge"/>
+                                        </connections>
+                                    </tableView>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <animations/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </view>
                     <toolbarItems/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
@@ -437,38 +599,51 @@
                         <outlet property="backVisualEffect" destination="W1p-Y5-OKP" id="i6V-W6-vRx"/>
                         <outlet property="bgView" destination="Bga-3y-2Ez" id="1Sc-EZ-r8J"/>
                         <outlet property="bottomView" destination="32S-Y7-hhn" id="p9Y-cd-gdQ"/>
+                        <outlet property="clipButton" destination="Fd8-Kc-dz5" id="8yB-Lp-phq"/>
+                        <outlet property="clipTableView" destination="01Q-bX-pNO" id="7KE-5y-NBi"/>
+                        <outlet property="clipView" destination="62c-E2-gUl" id="Fba-fC-CZc"/>
+                        <outlet property="clockButton" destination="SGv-jK-rYA" id="29S-3G-S17"/>
+                        <outlet property="clockHeader" destination="HUF-bs-Uu3" id="ZYG-mk-0Gv"/>
+                        <outlet property="clockMessage" destination="whm-Ul-dvS" id="HpU-UK-PCF"/>
+                        <outlet property="clockView" destination="f0s-AB-afi" id="oDa-mM-ktJ"/>
                         <outlet property="currentTimeLabel" destination="4ke-fz-dn7" id="bJj-Nh-Vma"/>
+                        <outlet property="doubleTapReset" destination="AOQ-0l-trw" id="TX2-Vc-4Rd"/>
+                        <outlet property="downLoadButton" destination="90c-kr-GeD" id="rKe-dV-3fS"/>
+                        <outlet property="drawButton" destination="omO-zm-Iqd" id="vQs-cp-tCj"/>
+                        <outlet property="drawView" destination="53v-4Z-Bcc" id="TEY-Ig-2gj"/>
                         <outlet property="editButton" destination="0Hd-G6-0Kz" id="1wo-hQ-f5m"/>
                         <outlet property="emailClip" destination="O1J-xa-Kzb" id="tis-fC-QSP"/>
                         <outlet property="ff" destination="jRG-Bp-VF7" id="NIZ-bE-nr3"/>
-                        <outlet property="gameName" destination="OgC-lV-mQ5" id="ikJ-Cn-Pp9"/>
                         <outlet property="gameScrollView" destination="JBQ-dR-7KX" id="xmF-mm-jlh"/>
                         <outlet property="headerView" destination="UBQ-HZ-7cK" id="tJM-G2-KU9"/>
                         <outlet property="importButton" destination="h5s-BX-mqK" id="dKW-ba-T37"/>
                         <outlet property="markPlayButton" destination="eiK-Pf-3hB" id="OeP-WZ-1ZE"/>
                         <outlet property="markView" destination="f2w-r4-Xaj" id="IrS-ec-h9J"/>
+                        <outlet property="noVideoImage" destination="DWL-En-mWR" id="nmP-eZ-reJ"/>
+                        <outlet property="noVideoMessage" destination="3lX-aR-qLt" id="RTi-kc-KHP"/>
                         <outlet property="pauseButton" destination="7lt-s1-U3O" id="X0g-ov-cDc"/>
                         <outlet property="playButton" destination="LQB-dD-7N7" id="ZjM-r0-zOi"/>
-                        <outlet property="playerScrollView" destination="juB-Ys-Q7F" id="WLE-89-eRK"/>
                         <outlet property="playerScrollViewVisualEffectContainer" destination="8Pz-jQ-bn2" id="0wL-Dq-alA"/>
                         <outlet property="playerView" destination="ifC-Np-DaH" id="Wba-43-5uQ"/>
-                        <outlet property="progressView" destination="0Xt-xr-2EE" id="PDE-hs-4VH"/>
                         <outlet property="rewd" destination="BCU-OJ-36U" id="PEz-U5-m1a"/>
                         <outlet property="saveAndEmail" destination="hlu-z8-UZs" id="7ba-0k-lY3"/>
                         <outlet property="saveClip" destination="ByB-OP-wCf" id="V7g-9T-5MX"/>
+                        <outlet property="startMarked" destination="mNp-Hu-ilS" id="kvE-jd-XEc"/>
                         <outlet property="startOver" destination="UJO-Z3-oEd" id="vey-yS-FBc"/>
                         <outlet property="statView" destination="APY-Qs-Sei" id="Dqh-k7-gpo"/>
                         <outlet property="statsButton" destination="WzG-1O-qbW" id="AxW-Cu-pXw"/>
                         <outlet property="stepBack" destination="LGI-D8-uFc" id="hBv-bq-Lu1"/>
                         <outlet property="stepOne" destination="yfB-oN-1iA" id="fdX-4h-RCB"/>
+                        <outlet property="timeLabel" destination="clp-oI-reQ" id="moy-DU-zNd"/>
                         <outlet property="totalTimeLabel" destination="VHB-or-ggk" id="bY0-Zo-OM0"/>
                         <outlet property="videoSlider" destination="Qs2-h2-xDU" id="Oc8-8K-BRb"/>
+                        <outlet property="viewContainerScrollView" destination="juB-Ys-Q7F" id="wfU-mg-QdN"/>
                         <outlet property="visualForEdit" destination="PJM-yB-DTQ" id="Jjf-RI-dqj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZVb-h0-cpl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1879" y="72"/>
+            <point key="canvasLocation" x="1789" y="94"/>
         </scene>
         <!--Download View Controller-->
         <scene sceneID="SVL-3E-YvK">
@@ -643,19 +818,31 @@
     </scenes>
     <resources>
         <image name="backwards" width="128" height="128"/>
-        <image name="color" width="3000" height="2000"/>
-        <image name="edit_mode3" width="500" height="500"/>
-        <image name="forward" width="128" height="128"/>
+        <image name="basketball-bg" width="5370" height="3580"/>
+        <image name="clips" width="300" height="300"/>
+        <image name="clipvideo" width="300" height="300"/>
+        <image name="clock" width="300" height="300"/>
+        <image name="download" width="300" height="300"/>
+        <image name="email" width="300" height="300"/>
+        <image name="emailsave2" width="300" height="300"/>
+        <image name="flag" width="300" height="300"/>
+        <image name="forward" width="300" height="300"/>
         <image name="forward-1" width="128" height="128"/>
         <image name="iPad" width="256" height="256"/>
-        <image name="markplay" width="128" height="128"/>
+        <image name="markplay" width="300" height="300"/>
         <image name="nature" width="1024" height="768"/>
-        <image name="pause" width="128" height="128"/>
-        <image name="play" width="128" height="128"/>
+        <image name="novideo" width="2600" height="1500"/>
+        <image name="pause" width="300" height="300"/>
+        <image name="play" width="300" height="300"/>
         <image name="refresh-1127205106" width="256" height="256"/>
-        <image name="rewind" width="128" height="128"/>
-        <image name="stepminusone" width="128" height="128"/>
-        <image name="stepone" width="128" height="128"/>
+        <image name="rewind" width="300" height="300"/>
+        <image name="save" width="300" height="300"/>
+        <image name="select" width="300" height="300"/>
+        <image name="startmarked" width="300" height="300"/>
+        <image name="startover" width="300" height="300"/>
+        <image name="stats-1" width="300" height="300"/>
+        <image name="stepminusone" width="300" height="300"/>
+        <image name="stepone" width="300" height="300"/>
         <image name="swipeinfo" width="1200" height="500"/>
     </resources>
 </document>

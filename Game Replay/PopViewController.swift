@@ -7,37 +7,31 @@
 //
 
 import UIKit
+import AVFoundation
 
-class PopViewController: UIViewController {
-
-    @IBOutlet weak var trailButton: UIButton!
-    @IBOutlet weak var centerButton: UIButton!
-    @IBOutlet weak var leadButton: UIButton!
-    @IBOutlet weak var scrollView: UIScrollView!
-    @IBOutlet weak var yesButton: UIButton!
-    @IBOutlet weak var noButton: UIButton!
+class PopViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    var data = [String]()
+    var mainView = MainViewController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        scrollView.contentSize = CGSize(width: 800, height: 300)
-        trailButton.layer.cornerRadius = 10
-        trailButton.layer.borderWidth = 1
-        trailButton.layer.borderColor = UIColor ( red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0 ).CGColor
-        centerButton.layer.cornerRadius = 10
-        centerButton.layer.borderWidth = 1
-        centerButton.layer.borderColor = UIColor ( red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0 ).CGColor
-        leadButton.layer.cornerRadius = 10
-        leadButton.layer.borderWidth = 1
-        leadButton.layer.borderColor = UIColor ( red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0 ).CGColor
-        yesButton.layer.borderColor = UIColor ( red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0 ).CGColor
-        yesButton.layer.cornerRadius = 10
-        yesButton.layer.borderWidth = 1
-        noButton.layer.cornerRadius = 10
-        noButton.layer.borderWidth = 1
-        noButton.layer.borderColor = UIColor ( red: 0.8, green: 0.8, blue: 0.8, alpha: 1.0 ).CGColor
-
+        tableView.delegate = self
+        tableView.registerNib(UINib(nibName: "PopTableViewCell", bundle: nil), forCellReuseIdentifier: "cell")
+        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let documentsDirectory = paths[0] as String
+        let filemanager:NSFileManager = NSFileManager()
+        let files = filemanager.enumeratorAtPath(documentsDirectory)
+        
+        while let file = files!.nextObject() as? String {
+            if file.hasSuffix("mp4") || file.hasSuffix("mov") || file.hasSuffix("m4v") || file.hasSuffix("MP4") || file.hasSuffix("MOV") || file.hasSuffix("M4V") {
+                data.append(file)
+            }
+        }
 
         // Do any additional setup after loading the view.
     }
@@ -48,14 +42,31 @@ class PopViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.data.count
     }
-    */
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell: UITableViewCell = (tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell?)!
+        
+        if(indexPath.row % 2 == 0){
+            cell.backgroundColor = UIColor.clearColor()
+        }else {
+            cell.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+            cell.textLabel?.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.0)
+        }
+        
+        cell.textLabel?.text = self.data[indexPath.row]
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        gameForInsert = data[indexPath.row]
+    }
+    
+
+    
 
 }

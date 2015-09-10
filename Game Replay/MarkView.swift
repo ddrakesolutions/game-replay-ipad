@@ -207,8 +207,8 @@ class MarkView: UIView, UITextFieldDelegate {
         let context : NSManagedObjectContext = appDelegate.managedObjectContext
         let en = NSEntityDescription.entityForName("PlayInfo", inManagedObjectContext: context)
         let play = PlayData(entity: en!, insertIntoManagedObjectContext: context)
-         
-        play.play = "\(position)" + "+" + "\(playOccurrence)" + "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)" + "+" + "\(gameName)"
+         print(gameFile)
+        play.play = "\(position)" + "+" + "\(playOccurrence)" + "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)" + "+" + "\(gameFile)" + "+" + "\(currentTimeForData)"
     
         do{
             try context.save()
@@ -229,27 +229,11 @@ class MarkView: UIView, UITextFieldDelegate {
             self.hidden = true
         })
     
-        setStats()
         resetMarkView()
     
     
     }
-    
-    func setStats(){
-        
-        var locations  = [PlayData]()
-        
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let context : NSManagedObjectContext = appDelegate.managedObjectContext
-        
-        let fetchRequest = NSFetchRequest(entityName: "PlayInfo")
-        do{
-            locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
-        } catch{}
-        // Then you can use your propertys.
-        
-        
-    }
+  
  
     
     

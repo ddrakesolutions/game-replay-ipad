@@ -14,10 +14,15 @@ import QuartzCore
 import MessageUI
 import CoreData
 
-class MainViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate {
+var gameNameForData = "0"
+var gameFile = "0"
+var gameForInsert = ""
+var currentTimeForData: Float64 = 0.0
 
+class MainViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate, UIGestureRecognizerDelegate, MFMailComposeViewControllerDelegate, UITextFieldDelegate, UITableViewDataSource, UITableViewDelegate {
+    
     // MARK: - Outlets
-    @IBOutlet weak var playerScrollView: UIScrollView!
+    @IBOutlet weak var viewContainerScrollView: UIScrollView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var pauseButton: UIButton!
     @IBOutlet weak var totalTimeLabel: UILabel!
@@ -29,11 +34,9 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var rewd: UIButton!
     @IBOutlet weak var stepBack: UIButton!
     @IBOutlet weak var visualForEdit: UIVisualEffectView!
-    @IBOutlet weak var gameName: UILabel!
     @IBOutlet weak var bottomView: UIView!
     @IBOutlet weak var headerView: UIView!
     @IBOutlet weak var importButton: UIButton!
-    @IBOutlet weak var progressView: ProgressView!
     @IBOutlet weak var emailClip: UIButton!
     @IBOutlet weak var saveClip: UIButton!
     @IBOutlet weak var startOver: UIButton!
@@ -49,6 +52,22 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBOutlet weak var playerScrollViewVisualEffectContainer: UIView!
     @IBOutlet weak var markView: MarkView!
     @IBOutlet weak var statView: UIView!
+    @IBOutlet weak var noVideoImage: UIImageView!
+    @IBOutlet weak var noVideoMessage: UILabel!
+    @IBOutlet weak var downLoadButton: UIButton!
+    @IBOutlet weak var drawView: UIView!
+    @IBOutlet weak var drawButton: UIButton!
+    @IBOutlet weak var clockView: UIView!
+    @IBOutlet weak var timeLabel: UILabel!
+    @IBOutlet weak var clockButton: UIButton!
+    @IBOutlet weak var clockHeader: UILabel!
+    @IBOutlet weak var doubleTapReset: UILabel!
+    @IBOutlet weak var clockMessage: UILabel!
+    @IBOutlet weak var startMarked: UIView!
+    @IBOutlet weak var clipButton: UIButton!
+    @IBOutlet weak var clipTableView: UITableView!
+    @IBOutlet weak var clipView: UIView!
+    
     
     
     // MARK: - Variables
@@ -74,14 +93,32 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     var rightSwipe = UIPanGestureRecognizer()
     var leftSwipeFast = UIPanGestureRecognizer()
     var rightSwipeFast = UIPanGestureRecognizer()
+    var resetClock = UITapGestureRecognizer()
     let checkTime : CMTime = CMTime()
     var isPlaying = false
     let prefs = NSUserDefaults.standardUserDefaults()
+    let titlePrefs = NSUserDefaults.standardUserDefaults()
+    let timeResume = NSUserDefaults.standardUserDefaults()
     var originNum : CGFloat = 0
     var views = [UIView]()
     var numOfViews : CGFloat = 1
     var games = [String]()
     var bgImages = [UIImage]()
+    var gameTitles = [String]()
+    var tempTitle = ""
+    var tempFile = ""
+    var timeForResume : Float64 = 0.0
+    var tag = 0
+    var timerForClock = NSTimer()
+    var timeForShotclock = 30
+    var timeForThrowIn = 5
+    var timeForBackCourt = 10
+    var changeClockRight = UIPanGestureRecognizer()
+    var changeClockLeft = UIPanGestureRecognizer()
+    var clockType = [String]()
+    var timeForClock = 30
+    var nextClockType = 0
+    var data = [Float64]()
     
     
     // MARK: - ViewDidLoad
@@ -107,9 +144,10 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         videoSlider.value = 0
         videoSlider.minimumValue = 0
         videoSlider.maximumValue = 1
-        videoSlider.setThumbImage(UIImage(named: "slider.png"), forState: .Normal)
-        videoSlider.setMaximumTrackImage(UIImage(named: "back.png"), forState: .Normal)
-        videoSlider.setMinimumTrackImage(UIImage(named: "back.png"), forState: .Normal)
+        videoSlider.setThumbImage(UIImage(named: "scrubber-normal.png"), forState: .Normal)
+        videoSlider.setThumbImage(UIImage(named: "scrubber-highlight.png"), forState: .Highlighted)
+        videoSlider.setMaximumTrackImage(UIImage(named: "bar-front.png"), forState: .Normal)
+        videoSlider.setMinimumTrackImage(UIImage(named: "bar-back.png"), forState: .Normal)
         videoSlider.enabled = false
         doubleTapGesture = UITapGestureRecognizer(target: self, action: Selector("markForEdit"))
         doubleTapGesture.numberOfTapsRequired = 2
@@ -121,6 +159,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         rightSwipeFast = UIPanGestureRecognizer(target: self, action: Selector("handlePanx2:"))
         leftSwipeFast.minimumNumberOfTouches = 2
         rightSwipeFast.minimumNumberOfTouches = 2
+        resetClock = UITapGestureRecognizer(target: self, action: Selector("resetForClock"))
+        resetClock.numberOfTapsRequired = 2
+        changeClockRight = UIPanGestureRecognizer(target: self, action: Selector("changeClock:"))
+        changeClockLeft = UIPanGestureRecognizer(target: self, action: Selector("changeClock:"))
+        changeClockRight.minimumNumberOfTouches = 1
+        changeClockLeft.minimumNumberOfTouches = 1
         visualForEdit.hidden = true
         startOver.hidden = true
         emailClip.hidden = true
@@ -128,8 +172,6 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         saveAndEmail.hidden = true
         bottomView.layer.masksToBounds = true
         actionView.hidden = true
-        progressView.hidden = true
-        progressView.alpha = 0.0
         actionView.layer.masksToBounds = true
         actionView.layer.cornerRadius = 10.0
         gameScrollView.delegate = self
@@ -137,31 +179,47 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         gameScrollView.hidden = true
         markView.transform = CGAffineTransformMakeScale(0.0,0.0)
         markView.hidden = true
-}
-    
+        importButton.enabled = false
+        drawView.hidden = true
+        timeLabel.text = "\(timeForClock)"
+        clockView.hidden = true
+        clockView.addGestureRecognizer(resetClock)
+        clockView.addGestureRecognizer(changeClockLeft)
+        clockView.addGestureRecognizer(changeClockRight)
+        clockType = ["Shot Clock", "Throw In", "Back Court"]
+        clockHeader.text = "Shot Clock"
+        doubleTapReset.hidden = true
+        clockView.layer.masksToBounds = true
+        clockView.layer.cornerRadius = 5
+        clockMessage.hidden = true
+        startMarked.hidden = true
+        clipTableView.delegate = self
+        clipTableView.backgroundView = UIImageView(image: UIImage(named: "basketball-bg.jpg"))
+        
+        
+    }
     override func viewDidDisappear(animated: Bool) {
         
-
+        
         originNum = 0
         numOfViews = 1
         
+        
+        for view in playerScrollViewVisualEffectContainer.subviews{
             
-     for view in playerScrollViewVisualEffectContainer.subviews{
-        
-                    view.removeFromSuperview()
-                    views.removeAll()
-                    games.removeAll()
-                    bgImages.removeAll()
-                print("Removing...")
-        
+            view.removeFromSuperview()
+            views.removeAll()
+            games.removeAll()
+            bgImages.removeAll()
+            print("Removing...")
+            
         }
     }
-
+    
     
     
     override func viewWillAppear(animated: Bool) {
         
-
         var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
         let documentsDirectory = paths[0] as String
         let filemanager:NSFileManager = NSFileManager()
@@ -178,23 +236,43 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 let importButton = UIButton()
                 let deleteButton = UIButton()
                 let gameName : String = "\(file)"
-                
+                let gameTitle = UITextField()
+                let dimView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) as UIVisualEffectView
                 
                 games.append(gameName)
                 
-                importButton.frame = CGRectMake(0, 0, 1024, 562)
                 importButton.backgroundColor = UIColor.clearColor();
                 importButton.tag = Int(numOfViews)
                 importButton.addTarget(self, action: Selector("insertVideoToView:"), forControlEvents: UIControlEvents.TouchUpInside)
+                importButton.setTitle("Select Video", forState: .Normal)
+                importButton.layer.cornerRadius = 10
+                importButton.layer.borderWidth = 1
+                importButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+                importButton.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+                importButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 60)
+                importButton.backgroundColor = UIColor.clearColor()
                 
-                deleteButton.frame = CGRectMake(0, 0, 150, 100)
-                deleteButton.backgroundColor = UIColor.redColor();
+                deleteButton.frame = CGRectMake(965, 90, 45, 50)
+                deleteButton.backgroundColor = UIColor.clearColor()
                 deleteButton.tag = Int(numOfViews)
                 deleteButton.addTarget(self, action: Selector("deleteVideo:"), forControlEvents: UIControlEvents.TouchUpInside)
+                deleteButton.setTitle("Delete Video", forState: .Normal)
+                deleteButton.setImage(UIImage(named: "delete.jpg"), forState: .Normal)
+                
+                gameTitle.frame = CGRectMake(0, 0, 1024, 80)
+                gameTitle.backgroundColor = UIColor.clearColor();
+                gameTitle.tag = Int(numOfViews)
+                gameTitle.textAlignment = .Center
+                gameTitle.placeholder = "Enter Game Title. - Example: Florida vs Tennessee"
+                gameTitle.delegate = self
+                gameTitle.returnKeyType = .Done
+                gameTitle.font = UIFont(name: "HelveticaNeue-Light", size: 35)
+                gameTitle.textColor = UIColor.blackColor().colorWithAlphaComponent(0.8)
+                gameTitle.setValue(UIColor.blackColor().colorWithAlphaComponent(0.52), forKeyPath: "_placeholderLabel.textColor")
                 
                 
-                imageView.frame = CGRectMake(0, 0, 1024, 562)
-                v.frame = CGRectMake(originNum, 0, 1024, 562)
+                imageView.frame = CGRectMake(0, 75, 1024, 562)
+                v.frame = CGRectMake(originNum, -75, 1024, 700)
                 
                 let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
                 let docsDir = dirPaths[0] as String
@@ -205,7 +283,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 do{
                     let assetImgGenerate : AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
                     assetImgGenerate.appliesPreferredTrackTransform = true
-                    let time: CMTime = CMTimeMake(0, 1)
+                    let time: CMTime = CMTimeMakeWithSeconds(0, asset.duration.timescale)
                     let img : CGImageRef = try assetImgGenerate.copyCGImageAtTime(time, actualTime: nil)
                     
                     let frameImg : UIImage = UIImage(CGImage: img)
@@ -217,7 +295,35 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 } catch{}
                 
                 let imgBg = imageView
-                imgBg.frame = CGRectMake(numOfViews, 0, 1024, 562)
+                
+                imgBg.layer.masksToBounds = true
+                imgBg.layer.cornerRadius = 10
+                imageView.layer.masksToBounds = true
+                imageView.layer.cornerRadius = 10
+                dimView.layer.masksToBounds = true
+                dimView.layer.cornerRadius = 10
+            
+                importButton.frame = imgBg.frame
+                
+                dimView.frame = imgBg.frame
+                dimView.backgroundColor = UIColor.whiteColor();
+                dimView.alpha = 0.90
+                
+
+                if(timeResume.objectForKey("\(gameName)time") == nil) {
+                    timeResume.setValue(0, forKey: "\(gameName)time")
+                }
+                
+                timeResume.setValue(timeResume.objectForKey("\(gameName)time"), forKey: "\(gameName)time")
+                
+                if let time = timeResume.objectForKey("\(gameName)time") {
+                    if(time as! Float == 0){
+                        importButton.setTitle("Select Video", forState: .Normal)
+                    }else
+                    {
+                        importButton.setTitle("Resume Video", forState: .Normal)
+                    }
+                }
                 
                 v.tag = Int(numOfViews)
                 numOfViews++
@@ -225,23 +331,47 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 playerScrollViewVisualEffectContainer.addSubview(imageView)
                 playerScrollViewVisualEffectContainer.addSubview(v)
                 v.addSubview(imageView)
+                v.addSubview(dimView)
                 v.addSubview(importButton)
                 v.addSubview(deleteButton)
+                v.addSubview(gameTitle)
                 self.originNum += 1024
+                
+                gameTitle.text = titlePrefs.objectForKey("\(gameName)") as? String
+                if(gameTitle.text == ""){
+                    gameTitles.append(gameTitle.placeholder!)
+                }else{
+                    gameTitles.append(gameTitle.text!)
+                }
+                
+                
                 
             }
         }
-       
-
-    }
-
-    
-    
-   
-    @IBAction func showStatView(sender: AnyObject) {
-    
         
-        UIView.animateWithDuration(0.5,
+        selectVideo()
+        downLoadButton.enabled = true
+        
+        if(games.isEmpty){
+            print("NO MORE VIDEOS")
+            importButton.enabled = false
+            noVideoImage.hidden = false
+            noVideoMessage.hidden = false
+        }else
+        {
+            noVideoImage.hidden = true
+            noVideoMessage.hidden = true
+        }
+        
+        
+    }
+    
+    
+    
+    @IBAction func showStatView(sender: AnyObject) {
+        
+        
+        UIView.animateWithDuration(0.3,
             delay: 0,
             usingSpringWithDamping: 0.7,
             initialSpringVelocity: 0.5,
@@ -256,10 +386,14 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     
-
+    
     @IBAction func showMarkView(sender: AnyObject) {
         
+        markView.awakeFromNib()
         markView.hidden = false
+        
+        currentTimeForData = currentTime
+        print(currentTimeForData)
         
         UIView.animateWithDuration(0.5,
             delay: 0,
@@ -267,256 +401,52 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             initialSpringVelocity: 0.5,
             options: UIViewAnimationOptions.CurveEaseInOut,
             animations: { [unowned self] in
-
-                //self.statsView.frame.origin.y = 138
-                self.markView.transform = CGAffineTransformMakeScale(1.0,1.0)
-
+                
+            self.markView.transform = CGAffineTransformMakeScale(1.0,1.0)
+                
             }, completion: nil)
         
     }
     
     
     
-    func deleteVideo(sender: UIButton) {
+    
+    
+    @IBAction func selectVideo() {
+    
+        timeResume.setValue(timeForResume, forKey: "\(tempFile)time")
         
-        print(sender.tag)
-        
-        UIView.animateWithDuration(0.4,
-            delay: 0,
-            usingSpringWithDamping: 1.0,
-            initialSpringVelocity: 0.5,
-            options: UIViewAnimationOptions.CurveEaseInOut,
-            animations: {
-                for view in self.playerScrollViewVisualEffectContainer.subviews {
-                    
-                    view.viewWithTag(sender.tag)?.alpha = 0.0
+        for view in self.playerScrollViewVisualEffectContainer.subviews {
+            
+            for field in view.subviews {
+                if let button = field.viewWithTag(Int(tag)) as? UIButton {
+                    print(button)
+                    if(button.titleLabel?.text == "Select Video" || button.titleLabel?.text == "Resume Video"){
+                        print("Select video found")
+                        if let time = timeResume.objectForKey("\(tempFile)time") {
+                            if(time as! Float == 0){
+                                button.setTitle("Select Video", forState: .Normal)
+                            }else
+                            {
+                                button.setTitle("Resume Video", forState: .Normal)
+                            }
+                        }
+                    }
                     
                 }
-            }, completion: nil)
-        
-        
-        var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        let documentsDirectory = paths[0] as String
-        let filemanager:NSFileManager = NSFileManager()
-        let files = filemanager.enumeratorAtPath(documentsDirectory)
-        
-        print("\(documentsDirectory)/\(games[sender.tag-1])")
-        originNum = 0
-        numOfViews = 1
-        
-        
-        
-        do{
-        try filemanager.removeItemAtPath("\(documentsDirectory)/\(games[sender.tag-1])")
-            print("Remove successful")
-        }
-        catch{print("Remove failed.")}
-        
-        for view in playerScrollViewVisualEffectContainer.subviews{
-            
-        
-            view.removeFromSuperview()
-            views.removeAll()
-            games.removeAll()
-            bgImages.removeAll()
-            print("Removing...")
-            
-            
-            
-        }
-        
-        
-        while let file = files!.nextObject() as? String {
-            if file.hasSuffix("mp4") || file.hasSuffix("mov") || file.hasSuffix("m4v") || file.hasSuffix("MP4") || file.hasSuffix("MOV") || file.hasSuffix("M4V") {
-                
-                
-                var url = NSURL()
-                let asset : AVURLAsset!
-                let v = UIView()
-                let imageView = UIImageView()
-                let importButton = UIButton()
-                let deleteButton = UIButton()
-                let gameName : String = "\(file)"
-                
-                
-                games.append(gameName)
-                
-                importButton.frame = CGRectMake(0, 0, 1024, 562)
-                importButton.backgroundColor = UIColor.clearColor();
-                importButton.tag = Int(numOfViews)
-                importButton.addTarget(self, action: Selector("insertVideoToView:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                deleteButton.frame = CGRectMake(0, 0, 150, 100)
-                deleteButton.backgroundColor = UIColor.redColor();
-                deleteButton.tag = Int(numOfViews)
-                deleteButton.addTarget(self, action: Selector("deleteVideo:"), forControlEvents: UIControlEvents.TouchUpInside)
-                
-                
-                imageView.frame = CGRectMake(0, 0, 1024, 562)
-                v.frame = CGRectMake(originNum, 0, 1024, 562)
-                
-                let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-                let docsDir = dirPaths[0] as String
-                
-                url = NSURL(fileURLWithPath: "\(docsDir)/\(file)")
-                let options = [AVURLAssetPreferPreciseDurationAndTimingKey:true]
-                asset = AVURLAsset(URL: url, options: options)
-                do{
-                    let assetImgGenerate : AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
-                    assetImgGenerate.appliesPreferredTrackTransform = true
-                    let time: CMTime = CMTimeMake(0, 1)
-                    let img : CGImageRef = try assetImgGenerate.copyCGImageAtTime(time, actualTime: nil)
-                    
-                    let frameImg : UIImage = UIImage(CGImage: img)
-                    
-                    imageView.image = frameImg
-                    
-                    bgImages.append(frameImg)
-                    
-                } catch{}
-                
-                let imgBg = imageView
-                imgBg.frame = CGRectMake(numOfViews, 0, 1024, 562)
-                
-                v.tag = Int(numOfViews)
-                numOfViews++
-                views.append(v)
-                playerScrollViewVisualEffectContainer.addSubview(imageView)
-                playerScrollViewVisualEffectContainer.addSubview(v)
-                v.addSubview(imageView)
-                v.addSubview(importButton)
-                v.addSubview(deleteButton)
-                self.originNum += 1024
-                
             }
         }
-
-        for view in playerScrollViewVisualEffectContainer.subviews {
-            view.transform = CGAffineTransformMakeScale(0.6, 0.6)
-            
-        }
-        self.playerScrollView.contentSize = CGSizeMake(1024 * (self.numOfViews-1), 562)
-        self.backVisualEffect.frame.size = CGSizeMake(1024 * (self.numOfViews-1), 562)
-        
-        if(numOfViews == 1){
-            print("NO MORE VIDEOS")
-            self.backVisualEffect.frame.size = CGSizeMake(1024, 562)
-        }
-        
-        
-            }
-    
-    
-    func insertVideoToView(sender: UIButton) {
-        
-        
-        stepBack.hidden = false
-        stepOne.hidden = false
-        ff.hidden = false
-        rewd.hidden = false
-        markPlayButton.hidden = false
-        playButton.hidden = false
-        let gameTag = sender.tag
-        let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
-        let docsDir = dirPaths[0] as String
-        url = NSURL(fileURLWithPath: "\(docsDir)/\(games[gameTag-1])")
-        let options = [AVURLAssetPreferPreciseDurationAndTimingKey:true]
-        asset = AVURLAsset(URL: url, options: options)
-        playerItem = AVPlayerItem(asset: asset)
-        player = AVPlayer(playerItem: playerItem)
-        playerLayer.player = player
-        playerLayer.frame = CGRectMake(0, 0, 1024, 562)
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        playerView.layer.addSublayer(playerLayer)
-        hasURL = true
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
-        videoSlider.enabled = true
-        gameName.text = "\(games[gameTag-1])"
-        bgView.image = bgImages[gameTag-1]
-        view.tag = 10
-        UIView.animateWithDuration(0.3,
-            delay: 0,
-            usingSpringWithDamping: 1.0,
-            initialSpringVelocity: 0.5,
-            options: UIViewAnimationOptions.CurveEaseInOut,
-            animations: {
-                for view in self.views {
-                    view.transform = CGAffineTransformMakeScale(1.0, 1.0)
-                    
-                }
-            }, completion: nil)
-        gameScrollView.hidden = false
-        playerScrollView.scrollEnabled = false
-        
-
-        
-    }
-   
-    
-
-    
-    /*-----------------------------------------------------------------*/
-    
-    // MARK: - Update Timer
-    
-    func updateTime(){
-        
-        durationTime = CMTimeGetSeconds(self.playerItem.duration) / 60
-        currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-        let durationMinString = NSString(format: "%.2f", durationTime)
-        let currentMinString = NSString(format: "%.2f", currentTime)
-        self.totalTimeLabel.text = durationMinString as String
-        self.currentTimeLabel.text = currentMinString as String
-        let test = Float(CMTimeGetSeconds(self.playerItem.currentTime())/CMTimeGetSeconds(self.playerItem.duration))
-        self.videoSlider.value = test
-        
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-            
-    @IBAction func startover(sender: AnyObject) {
-        
-        markEdit = 0.0
-        endEdit = 0.0
-        isMarked = false
-        playerView.addGestureRecognizer(leftSwipe)
-        playerView.addGestureRecognizer(rightSwipe)
-        playerView.addGestureRecognizer(leftSwipeFast)
-        playerView.addGestureRecognizer(rightSwipeFast)
-        playerView.addGestureRecognizer(doubleTapGesture)
-       
-        
-        UIView.animateWithDuration(0.4,
-            delay: 0,
-            usingSpringWithDamping: 0.7,
-            initialSpringVelocity: 0.5,
-            options: UIViewAnimationOptions.CurveEaseInOut,
-            animations: {
-                self.actionView.frame.origin.y = 150
-            }, completion: nil)
-        
-        
-        UIView.animateWithDuration(1.0,
-            delay: 0.1,
-            usingSpringWithDamping: 0.7,
-            initialSpringVelocity: 5.5,
-            options: UIViewAnimationOptions.CurveEaseInOut,
-            animations: {
-                self.actionView.frame.origin.y = 1000
-            }, completion: { finished in
-        self.actionView.hidden = true
-        
-        })
-    
-        
-    }
-    
-    @IBAction func selectVideo(sender: AnyObject) {
-    
+        clockView.hidden = true
+        drawButton.enabled = false
+        clockMessage.hidden = true
+        clockButton.enabled = false
+        downLoadButton.enabled = false
+        importButton.enabled = false
+        statsButton.enabled = false
+        editButton.enabled = false
+        videoSlider.enabled = false
+        currentTimeLabel.enabled = false
+        totalTimeLabel.enabled = false
         gameScrollView.hidden = true
         stepBack.hidden = true
         stepOne.hidden = true
@@ -534,28 +464,448 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             options: UIViewAnimationOptions.CurveEaseInOut,
             animations: {
                 for view in self.views {
-                    view.transform = CGAffineTransformMakeScale(0.6, 0.6)
+                    view.transform = CGAffineTransformMakeScale(0.7, 0.7)
                 }
-                self.playerScrollView.contentSize = CGSizeMake(1024 * (self.numOfViews-1), 562)
+                self.viewContainerScrollView.contentSize = CGSizeMake(1024 * (self.numOfViews-1), 562)
                 if(self.numOfViews == 1){
                     print("NO MORE VIDEOS")
                     self.backVisualEffect.frame.size = CGSizeMake(1024, 562)
                 }else
                 {
-                self.backVisualEffect.frame.size = CGSizeMake(1024 * (self.numOfViews-1), 562)
-                self.playerScrollView.scrollEnabled = true
+                    self.backVisualEffect.frame.size = CGSizeMake(1024 * (self.numOfViews-1), 562)
+                    self.viewContainerScrollView.scrollEnabled = true
                 }
-
+                
             }, completion: nil)
+       
     }
-
-
-
+    
+    
+    func insertVideoToView(sender: UIButton) {
+        
+        
+        let gameTag = sender.tag
+        
+        tag = sender.tag
+        
+        tempTitle = gameTitles[gameTag-1]
+        tempFile = games[gameTag-1]
+        
+        if let time = timeResume.objectForKey("\(tempFile)time") {
+            timeForResume = time as! Float64
+        }
+        
+        if(tempTitle == "Enter Game Title. - Example: Florida vs Tennessee"){
+            
+            for view in self.playerScrollViewVisualEffectContainer.subviews {
+                
+                for field in view.subviews {
+                    
+                    if let tField = field.viewWithTag(sender.tag) as? UITextField {
+                        UIView.animateWithDuration(0.3,
+                            delay: 0,
+                            usingSpringWithDamping: 0.3,
+                            initialSpringVelocity: 0.5,
+                            options: UIViewAnimationOptions.CurveEaseInOut,
+                            animations: {
+                                tField.transform = CGAffineTransformMakeScale(1.2, 1.2)
+                            }, completion: nil)
+                        UIView.animateWithDuration(0.4,
+                            delay: 0.1,
+                            usingSpringWithDamping: 0.3,
+                            initialSpringVelocity: 0.5,
+                            options: UIViewAnimationOptions.CurveEaseInOut,
+                            animations: {
+                                tField.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                            }, completion: nil)
+                        
+                    }
+                }
+            }
+            
+            return
+        }
+        
+        
+        UIView.animateWithDuration(0.1,
+            delay: 0,
+            usingSpringWithDamping: 1.0,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: {
+                for view in self.views {
+                    
+                    view.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                    
+                }
+            }, completion: nil)
+    
+        gameScrollView.alpha = 0.0
+        UIView.animateWithDuration(0.7,
+            delay: 0,
+            usingSpringWithDamping: 1.0,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: { [unowned self] in
+                
+                self.gameScrollView.hidden = false
+                self.gameScrollView.alpha = 1.0
+                
+            }, completion: nil)
+        
+        clockButton.enabled = true
+        drawButton.enabled = true
+        downLoadButton.enabled = true
+        importButton.enabled = true
+        editButton.enabled = true
+        statsButton.enabled = true
+        currentTimeLabel.enabled = true
+        totalTimeLabel.enabled = true
+        stepBack.hidden = false
+        stepOne.hidden = false
+        ff.hidden = false
+        rewd.hidden = false
+        markPlayButton.hidden = false
+        playButton.hidden = false
+        let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let docsDir = dirPaths[0] as String
+        url = NSURL(fileURLWithPath: "\(docsDir)/\(games[gameTag-1])")
+        let options = [AVURLAssetPreferPreciseDurationAndTimingKey:true]
+        asset = AVURLAsset(URL: url, options: options)
+        playerItem = AVPlayerItem(asset: asset)
+        player = AVPlayer(playerItem: playerItem)
+        playerLayer.player = player
+        playerLayer.frame = CGRectMake(0, 0, 1024, 562)
+        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
+        playerView.layer.addSublayer(playerLayer)
+        hasURL = true
+        videoSlider.enabled = true
+        viewContainerScrollView.scrollEnabled = false
+        gameNameForData = tempTitle
+        statView.awakeFromNib()
+        durationTime = CMTimeGetSeconds(asset.duration) / 60
+        let duration = NSString(format: "%.2f", durationTime)
+        totalTimeLabel.text = duration as String
+        gameFile = "\(games[gameTag-1])"
+        let progress = Float64(timeForResume)
+        let durationSeconds = CMTimeGetSeconds(self.asset.duration)
+        let result = durationSeconds * progress
+        let seekTime = CMTimeMakeWithSeconds(result, asset.duration.timescale)
+        player.seekToTime(seekTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+        currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+        let currentMinString = NSString(format: "%.2f", self.currentTime)
+        currentTimeLabel.text = currentMinString as String
+        let time = Float(CMTimeGetSeconds(self.playerItem.currentTime())/CMTimeGetSeconds(self.asset.duration))
+        videoSlider.value = time
+        timeResume.setValue(Float(timeForResume), forKey: "\(tempFile)time")
+    }
+    
+    func deleteVideo(sender: UIButton) {
+        
+        let alertView = UIAlertController(title: "Game Replay", message: "Are you sure you want to delete game? Game data will not be delete.", preferredStyle: .Alert)
+        
+        alertView.addAction(UIAlertAction(title: "OK", style: .Default, handler: {[unowned self] handler in
+            
+            self.currentTimeLabel.text = "0.00"
+            self.totalTimeLabel.text = "0.00"
+            self.videoSlider.value = 0
+            
+            UIView.animateWithDuration(0.15,
+                delay: 0,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: { [unowned self] in
+                    
+                    self.playerScrollViewVisualEffectContainer.viewWithTag(sender.tag)?.transform = CGAffineTransformMakeScale(0.0001, 0.0001)
+                    
+                }, completion: { [unowned self] finished in
+                    
+                    
+                    var paths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+                    let documentsDirectory = paths[0] as String
+                    let filemanager:NSFileManager = NSFileManager()
+                    let files = filemanager.enumeratorAtPath(documentsDirectory)
+                    
+                    print("\(documentsDirectory)/\(self.games[sender.tag-1])")
+                    self.originNum = 0
+                    self.numOfViews = 1
+                    
+                    
+                    do{
+                        try filemanager.removeItemAtPath("\(documentsDirectory)/\(self.games[sender.tag-1])")
+                        print("Remove successful")
+                    }
+                    catch{print("Remove failed.")}
+                    
+                    self.titlePrefs.setValue(nil, forKey: "\(self.games[sender.tag-1])")
+                    self.timeResume.setValue(nil, forKey: "\(self.games[sender.tag-1])time")
+                    
+                    for view in self.playerScrollViewVisualEffectContainer.subviews {
+                        
+                        
+                        view.removeFromSuperview()
+                        self.views.removeAll()
+                        self.games.removeAll()
+                        self.bgImages.removeAll()
+                        self.gameTitles.removeAll()
+                        print("Removing...")
+                        
+                        
+                    }
+                    
+                    
+                    while let file = files!.nextObject() as? String {
+                        if file.hasSuffix("mp4") || file.hasSuffix("mov") || file.hasSuffix("m4v") || file.hasSuffix("MP4") || file.hasSuffix("MOV") || file.hasSuffix("M4V") {
+                            
+                            
+                            var url = NSURL()
+                            let asset : AVURLAsset!
+                            let v = UIView()
+                            let imageView = UIImageView()
+                            let importButton = UIButton()
+                            let deleteButton = UIButton()
+                            let gameName : String = "\(file)"
+                            let gameTitle = UITextField()
+                            let dimView = UIVisualEffectView(effect: UIBlurEffect(style: UIBlurEffectStyle.Light)) as UIVisualEffectView
+                            
+                            self.games.append(gameName)
+                            
+                            importButton.backgroundColor = UIColor.clearColor();
+                            importButton.tag = Int(self.numOfViews)
+                            importButton.addTarget(self, action: Selector("insertVideoToView:"), forControlEvents: UIControlEvents.TouchUpInside)
+                            importButton.setTitle("Select Video", forState: .Normal)
+                            importButton.layer.cornerRadius = 10
+                            importButton.layer.borderWidth = 1
+                            importButton.layer.borderColor = UIColor.lightGrayColor().CGColor
+                            importButton.setTitleColor(UIColor.darkGrayColor(), forState: .Normal)
+                            importButton.titleLabel!.font = UIFont(name: "HelveticaNeue-Thin", size: 60)
+                            importButton.backgroundColor = UIColor.clearColor()
+                            
+                            deleteButton.frame = CGRectMake(965, 90, 45, 50)
+                            deleteButton.backgroundColor = UIColor.clearColor()
+                            deleteButton.tag = Int(self.numOfViews)
+                            deleteButton.addTarget(self, action: Selector("deleteVideo:"), forControlEvents: UIControlEvents.TouchUpInside)
+                            deleteButton.setTitle("Delete Video", forState: .Normal)
+                            deleteButton.setImage(UIImage(named: "delete.jpg"), forState: .Normal)
+                            
+                            gameTitle.frame = CGRectMake(0, 0, 1024, 80)
+                            gameTitle.backgroundColor = UIColor.clearColor();
+                            gameTitle.tag = Int(self.numOfViews)
+                            gameTitle.textAlignment = .Center
+                            gameTitle.placeholder = "Enter Game Title. - Example: Florida vs Tennessee"
+                            gameTitle.delegate = self
+                            gameTitle.returnKeyType = .Done
+                            gameTitle.font = UIFont(name: "HelveticaNeue-Light", size: 35)
+                            gameTitle.textColor = UIColor.blackColor().colorWithAlphaComponent(0.8)
+                            gameTitle.setValue(UIColor.blackColor().colorWithAlphaComponent(0.52), forKeyPath: "_placeholderLabel.textColor")
+                            
+                            
+                            imageView.frame = CGRectMake(0, 75, 1024, 562)
+                            v.frame = CGRectMake(self.originNum, -75, 1024, 700)
+                            
+                            let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+                            let docsDir = dirPaths[0] as String
+                            
+                            url = NSURL(fileURLWithPath: "\(docsDir)/\(file)")
+                            let options = [AVURLAssetPreferPreciseDurationAndTimingKey:true]
+                            asset = AVURLAsset(URL: url, options: options)
+                            do{
+                                let assetImgGenerate : AVAssetImageGenerator = AVAssetImageGenerator(asset: asset)
+                                assetImgGenerate.appliesPreferredTrackTransform = true
+                                let time: CMTime = CMTimeMakeWithSeconds(0, 1)
+                                let img : CGImageRef = try assetImgGenerate.copyCGImageAtTime(time, actualTime: nil)
+                                
+                                let frameImg : UIImage = UIImage(CGImage: img)
+                                
+                                imageView.image = frameImg
+                                
+                                self.bgImages.append(frameImg)
+                                
+                            } catch{}
+                            
+                            let imgBg = imageView
+                            
+                            imgBg.layer.masksToBounds = true
+                            imgBg.layer.cornerRadius = 10
+                            imageView.layer.masksToBounds = true
+                            imageView.layer.cornerRadius = 10
+                            dimView.layer.masksToBounds = true
+                            dimView.layer.cornerRadius = 10
+                            
+                            importButton.frame = imgBg.frame
+                            
+                            dimView.frame = imgBg.frame
+                            dimView.backgroundColor = UIColor.whiteColor();
+                            dimView.alpha = 0.90
+                            
+                            print(self.timeResume.objectForKey("\(gameName)time"))
+                            if(self.timeResume.objectForKey("\(gameName)time") == nil) {
+                                self.timeResume.setValue(0, forKey: "\(gameName)time")
+                            }
+                            
+                            self.timeResume.setValue(self.timeResume.objectForKey("\(gameName)time"), forKey: "\(gameName)time")
+                            
+                            if let time = self.timeResume.objectForKey("\(gameName)time") {
+                                if(time as! Float == 0){
+                                    importButton.setTitle("Select Video", forState: .Normal)
+                                }else
+                                {
+                                    importButton.setTitle("Resume Video", forState: .Normal)
+                                }
+                            }
+                            
+                            v.tag = Int(self.numOfViews)
+                            self.numOfViews++
+                            self.views.append(v)
+                            self.playerScrollViewVisualEffectContainer.addSubview(imageView)
+                            self.playerScrollViewVisualEffectContainer.addSubview(v)
+                            v.addSubview(imageView)
+                            v.addSubview(dimView)
+                            v.addSubview(importButton)
+                            v.addSubview(deleteButton)
+                            v.addSubview(gameTitle)
+                            self.originNum += 1024
+                            
+                            gameTitle.text = self.titlePrefs.objectForKey("\(gameName)") as? String
+                            if(gameTitle.text == ""){
+                                self.gameTitles.append(gameTitle.placeholder!)
+                            }else{
+                                self.gameTitles.append(gameTitle.text!)
+                            }
+                            
+                            
+                            
+                        }
+                    }
+                    
+                    for view in self.views {
+                        view.transform = CGAffineTransformMakeScale(0.0, 0.0)
+                    }
+                    
+                    self.viewContainerScrollView.contentSize = CGSizeMake(1024 * (self.numOfViews-1), 562)
+                    
+                    UIView.animateWithDuration(0.3,
+                        delay: 0,
+                        usingSpringWithDamping: 1.3,
+                        initialSpringVelocity: 0.7,
+                        options: UIViewAnimationOptions.CurveEaseInOut,
+                        animations: {
+                            for view in self.views {
+                                view.transform = CGAffineTransformMakeScale(0.7, 0.7)
+                            }
+                        
+                            
+                            if(self.numOfViews == 1){
+                                print("NO MORE VIDEOS")
+                                self.backVisualEffect.frame.size = CGSizeMake(1024, 562)
+                            }else
+                            {
+                                self.backVisualEffect.frame.size = CGSizeMake(1024 * (self.numOfViews-1), 562)
+                                self.viewContainerScrollView.scrollEnabled = true
+                            }
+                            
+                        }, completion: nil)
+                    
+                    self.downLoadButton.enabled = true
+                    
+                    if(self.games.isEmpty){
+                        print("NO MORE VIDEOS")
+                        self.importButton.enabled = false
+                        self.noVideoImage.hidden = false
+                        self.noVideoMessage.hidden = false
+                    }else
+                    {
+                        self.noVideoImage.hidden = true
+                        self.noVideoMessage.hidden = true
+                    }
+                    
+            })
+            
+            
+            
+            
+        }))
+        
+        alertView.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { handler in
+            return
+        }))
+        
+        presentViewController(alertView, animated: true, completion: nil)
+        
+        
+        
+        
+        
+    }
+    
+    
+    
+    /*-----------------------------------------------------------------*/
+    
+    // MARK: - Update Timer
+    
+    func updateTime(){
+        
+        currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+        let currentMinString = NSString(format: "%.2f", self.currentTime)
+        currentTimeLabel.text = currentMinString as String
+        let time = Float(CMTimeGetSeconds(self.playerItem.currentTime())/CMTimeGetSeconds(self.asset.duration))
+        videoSlider.value = time
+        timeForResume = CMTimeGetSeconds(self.playerItem.currentTime())/CMTimeGetSeconds(self.asset.duration)
+        timeResume.setFloat(Float(timeForResume), forKey: "\(tempFile)time")
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+    
+    
+    @IBAction func startover(sender: AnyObject) {
+        
+        markEdit = 0.0
+        endEdit = 0.0
+        isMarked = false
+        playerView.addGestureRecognizer(leftSwipe)
+        playerView.addGestureRecognizer(rightSwipe)
+        playerView.addGestureRecognizer(leftSwipeFast)
+        playerView.addGestureRecognizer(rightSwipeFast)
+        playerView.addGestureRecognizer(doubleTapGesture)
+        
+        
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: {
+                self.actionView.frame.origin.x = -65
+            }, completion: nil)
+        
+        
+        UIView.animateWithDuration(1.0,
+            delay: 0.1,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 5.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: {
+                self.actionView.frame.origin.x = -280
+            }, completion: { finished in
+                self.actionView.hidden = true
+                
+        })
+        
+        
+    }
+    
+    
+    
+    
+    
     @IBAction func emailClip(sender: AnyObject) {
-    
+        
         if(inEditMode && markEdit != 0.00 && endEdit != 0.00) {
-    
-    
+            
+            
             let assetVideoTrack: AVAssetTrack = asset.tracksWithMediaType(AVMediaTypeVideo).first!
             
             let comp = AVMutableComposition()
@@ -604,14 +954,37 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                     }
                 }
             })
+         
+            
+            UIView.animateWithDuration(0.3,
+                delay: 0,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 0.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.actionView.frame.origin.x = -65
+                }, completion: nil)
+            
+            
+            UIView.animateWithDuration(1.0,
+                delay: 0.1,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 5.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.actionView.frame.origin.x = -280
+                }, completion: { finished in
+                    self.actionView.hidden = true
+                    
+            })
             
         }
-
+        
         
     }
     
     
-
+    
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         
         self.dismissViewControllerAnimated(true, completion: {
@@ -640,11 +1013,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.emailClip.hidden = true
             self.saveClip.hidden = true
             self.saveAndEmail.hidden = true
-            self.importButton.alpha = 1.0
-            self.statsButton.alpha = 1.0
-           
+            self.importButton.enabled = true
+            self.statsButton.enabled = true
+            self.downLoadButton.enabled = true
+            
             self.actionView.hidden = true
-        
+            
             
             self.playerView.removeGestureRecognizer(self.leftSwipe)
             self.playerView.removeGestureRecognizer(self.rightSwipe)
@@ -654,8 +1028,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.inEditMode = false
             self.isMarked = false
             self.visualForEdit.hidden = true
-            self.playerScrollView.minimumZoomScale = 1.0
-            self.playerScrollView.maximumZoomScale = 3.0
+            self.gameScrollView.minimumZoomScale = 1.0
+            self.gameScrollView.maximumZoomScale = 3.0
             let filemgr = NSFileManager.defaultManager()
             let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
             let docsDir = dirPaths[0] as String
@@ -666,11 +1040,11 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             }
             catch { print("Remove failed") }
         })
-        self.actionView.frame.origin.y = 1000        
+        
         
     }
     
-
+    
     @IBAction func dismissMarkView(sender: AnyObject) {
         
         UIView.transitionWithView(visualForEdit, duration: 0.5, options: UIViewAnimationOptions.AllowUserInteraction, animations: {
@@ -683,8 +1057,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         prefs.setValue("true", forKey: "dontShowAgain")
         
     }
-
-
+    
+    
     func handlePan(gestureRecognizer: UIPanGestureRecognizer) {
         
         
@@ -699,26 +1073,26 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 if(velocity.x > 0)
                 {
                     dispatch_async(dispatch_get_main_queue(), {
-                    
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForward"), userInfo: nil, repeats: false)
-                })
                         
-                        }
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
                         
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForward"), userInfo: nil, repeats: false)
+                    })
+                    
+                }
+                    
                 else
                 {
-
+                    
                     dispatch_async(dispatch_get_main_queue(), {
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewind"), userInfo: nil, repeats: false)
-                })
-                    }
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewind"), userInfo: nil, repeats: false)
+                    })
+                }
             }
             
             
@@ -732,12 +1106,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 if(velocity.x > 0)
                     
                 {
-                    
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForward"), userInfo: nil, repeats: false)
-                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForward"), userInfo: nil, repeats: false)
+                    })
                 }
                 else
                 {
@@ -747,11 +1121,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                     if (checkTime <= markEdit){
                         return
                     }
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewind"), userInfo: nil, repeats: false)
-                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewind"), userInfo: nil, repeats: false)
+                    })
                 }
             }
             
@@ -774,22 +1149,22 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 
                 if(velocity.x > 0)
                 {
-        
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForwardx2"), userInfo: nil, repeats: false)
-     
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForwardx2"), userInfo: nil, repeats: false)
+                    })
                 }
                 else
                 {
                     
-                    
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewindx2"), userInfo: nil, repeats: false)
-
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewindx2"), userInfo: nil, repeats: false)
+                    })
                 }
             }
             
@@ -804,12 +1179,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 if(velocity.x > 0)
                     
                 {
-                    
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForwardx2"), userInfo: nil, repeats: false)
-                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipFastForwardx2"), userInfo: nil, repeats: false)
+                    })
                 }
                 else
                 {
@@ -819,11 +1194,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                     if (checkTime <= markEdit){
                         return
                     }
-                    self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
-                    let currentMinString = NSString(format: "%.2f", self.currentTime)
-                    self.currentTimeLabel.text = currentMinString as String
-                    self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewindx2"), userInfo: nil, repeats: false)
-                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.currentTime = CMTimeGetSeconds(self.playerItem.currentTime()) / 60
+                        let currentMinString = NSString(format: "%.2f", self.currentTime)
+                        self.currentTimeLabel.text = currentMinString as String
+                        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("clipRewindx2"), userInfo: nil, repeats: false)
+                    })
                 }
             }
             
@@ -831,18 +1207,19 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         
     }
-   
+    
     
     @IBAction func editVideo(sender: UIButton) {
         
+        
         if(!inEditMode){
             
+            downLoadButton.enabled = false
             videoSlider.enabled = false
             markEdit = 0.0
             endEdit = 0.0
             if let dontShowAgain = prefs.objectForKey("dontShowAgain"){
                 if dontShowAgain as! String == "false" {
-                    
                     
                     self.visualForEdit.alpha = 1.0
                     self.visualForEdit.transform = CGAffineTransformMakeScale(10.0, 10.0)
@@ -851,14 +1228,16 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                         let transform = CGAffineTransformMakeScale(1.0, 1.0)
                         self.visualForEdit.transform = transform
                         self.editButton.setTitleColor(UIColor(red: 158/255, green: 66/255, blue: 66/255, alpha: 1), forState: .Normal)
-                        self.importButton.alpha = 0.3
-                        self.statsButton.alpha = 0.3
+                        self.importButton.enabled = false
+                        self.statsButton.enabled = false
+                        self.downLoadButton.enabled = false
                         }, completion:nil)
-                
+                    
                 }else {UIView.animateWithDuration(0.2, animations:{
                     self.editButton.setTitleColor(UIColor(red: 158/255, green: 66/255, blue: 66/255, alpha: 1), forState: .Normal)
-                    self.importButton.alpha = 0.3
-                    self.statsButton.alpha = 0.3
+                    self.importButton.enabled = false
+                    self.statsButton.enabled = false
+                    self.downLoadButton.enabled = false
                     self.visualForEdit.alpha = 0.0
                     self.videoSlider.frame.origin.y = 900
                     self.currentTimeLabel.frame.origin.y = 900
@@ -874,11 +1253,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                     let transform = CGAffineTransformMakeScale(1.0, 1.0)
                     self.visualForEdit.transform = transform
                     self.editButton.setTitleColor(UIColor(red: 158/255, green: 66/255, blue: 66/255, alpha: 1), forState: .Normal)
-                    self.importButton.alpha = 0.3
-                    self.statsButton.alpha = 0.3
+                    self.importButton.enabled = false
+                    self.statsButton.enabled = false
+                    self.downLoadButton.enabled = false
                     }, completion:nil)
             }
-
+            
             
             print("turning on editing")
             stepBack.hidden = true
@@ -895,10 +1275,10 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             playerView.addGestureRecognizer(rightSwipeFast)
             playerView.addGestureRecognizer(doubleTapGesture)
             inEditMode = true
-            playerScrollView.minimumZoomScale = 0.0
-            playerScrollView.maximumZoomScale = 0.0
-
-
+            gameScrollView.minimumZoomScale = 0.0
+            gameScrollView.maximumZoomScale = 0.0
+            
+            
         }
         else {
             
@@ -916,9 +1296,9 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             saveAndEmail.hidden = true
             
             actionView.hidden = true
-           
             
-
+            
+            
             UIView.transitionWithView(visualForEdit, duration: 0.2, options: UIViewAnimationOptions.AllowUserInteraction, animations: {
                 let transform = CGAffineTransformMakeScale(1.0, 1.0)
                 self.visualForEdit.transform = transform
@@ -927,10 +1307,12 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 self.statsButton.alpha = 1.0
                 }, completion: nil)
             
+            self.importButton.enabled = true
+            self.statsButton.enabled = true
+            downLoadButton.enabled = true
             videoSlider.enabled = true
             print("turning off editing")
             self.visualForEdit.hidden = true
-            //self.editModeView.hidden = true
             stepBack.hidden = false
             stepOne.hidden = false
             ff.hidden = false
@@ -944,37 +1326,53 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             playerView.removeGestureRecognizer(doubleTapGesture)
             inEditMode = false
             isMarked = false
-            playerScrollView.minimumZoomScale = 1.0
-            playerScrollView.maximumZoomScale = 3.0
-            progressView.layer.masksToBounds = true
-        
+            gameScrollView.minimumZoomScale = 1.0
+            gameScrollView.maximumZoomScale = 3.0
+            
         }
-}
+    }
     
     func markForEdit(){
         
         if (!isMarked){
+            
             markEdit = CMTimeGetSeconds(self.playerItem.currentTime())
             isMarked = true
-            progressView.reset()
-            progressView.alpha = 1.0
-            progressView.hidden = false
-            progressView.animateProgressView()
             
-            UIView.animateWithDuration(2.0, delay: 1.0, options: UIViewAnimationOptions.CurveEaseIn, animations: {
-                
-                     self.progressView.alpha = 0.0
-                
+            self.startMarked.transform = CGAffineTransformMakeScale(0.0, 0.0)
+            self.startMarked.hidden = false
+            
+            UIView.animateWithDuration(0.2,
+                delay: 0,
+                usingSpringWithDamping: 3.3,
+                initialSpringVelocity: 3.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: { [unowned self] in
+                    self.startMarked.transform = CGAffineTransformMakeScale(1.0, 1.0)
                 }, completion: nil)
+            
+            UIView.animateWithDuration(0.3,
+                delay: 1.0,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 0.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.startMarked.transform = CGAffineTransformMakeScale(0.001, 0.001)
+                }, completion: {finished in
+                    self.startMarked.hidden = true
+            
+            })
+            
+            
             
             
         }else {
-
+            
             endEdit = CMTimeGetSeconds(self.playerItem.currentTime())
-           
-            self.actionView.frame.origin.y = 1000
+            
+            self.actionView.frame.origin.x = -280
             actionView.hidden = false
-           
+            
             
             UIView.animateWithDuration(0.2, delay: 2.0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
                 
@@ -987,7 +1385,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 self.playerView.removeGestureRecognizer(self.leftSwipeFast)
                 self.playerView.removeGestureRecognizer(self.rightSwipeFast)
                 self.playerView.removeGestureRecognizer(self.doubleTapGesture)
-                self.progressView.hidden = true
+
                 
                 }, completion:nil)
             
@@ -997,14 +1395,14 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
                 initialSpringVelocity: 0.5,
                 options: UIViewAnimationOptions.CurveEaseInOut,
                 animations: { [unowned self] in
-                    self.actionView.frame.origin.y = 200
+                    self.actionView.frame.origin.x = -80
                 }, completion: nil)
             
-}
-
-    
+        }
+        
+        
     }
-
+    
     
     // MARK: - Zoom View
     
@@ -1012,50 +1410,30 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         return playerView
     }
     
-    // MARK: - Image Picker
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        
-        url = info[UIImagePickerControllerReferenceURL] as! NSURL
-        asset = AVURLAsset(URL: url, options: nil)
-        playerItem = AVPlayerItem(asset: asset)
-        player = AVPlayer(playerItem: playerItem)
-        playerLayer.player = player
-        playerLayer.frame = CGRectMake(0, 0, 1024, 562)
-        playerLayer.videoGravity = AVLayerVideoGravityResizeAspectFill
-        self.view.layer.addSublayer(playerLayer)
-        hasURL = true
-        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
-        self.dismissViewControllerAnimated(true, completion: {
-            self.videoSlider.enabled = true
-        })
+    // MARK: - Play/Pause
     
-    }
-   
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        
-        dismissViewControllerAnimated(true, completion: nil)
-        
-    }
-    
-    
-
-    
-       // MARK: - Play/Pause
-    
-    @IBAction func playVideo(sender: AnyObject) {
+    @IBAction func playVideo() {
         
         if(hasURL!){
-        player.play()
-        playButton.hidden = true
-        pauseButton.hidden = false
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: true)
-        stepBack.alpha = 0.25
-        stepOne.alpha = 0.25
-        ff.alpha = 0.25
-        rewd.alpha = 0.25
-        markPlayButton.alpha = 0.25
-        isPlaying = true
+            
+            if(!clockView.hidden){
+                
+            startTimeCountdown()
+                
+            }
+            
+            
+            player.play()
+            playButton.hidden = true
+            pauseButton.hidden = false
+            updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: true)
+            stepBack.alpha = 0.25
+            stepOne.alpha = 0.25
+            ff.alpha = 0.25
+            rewd.alpha = 0.25
+            markPlayButton.alpha = 0.25
+            isPlaying = true
         }
         else {
             let alertView = UIAlertController(title: "Game Replay", message: "Please select a video.", preferredStyle: .Alert)
@@ -1068,6 +1446,13 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     @IBAction func pauseVideo() {
+        
+        if(!clockView.hidden){
+            
+            stopTimeCountdown()
+            
+        }
+        
         player.pause()
         playButton.hidden = false
         pauseButton.hidden = true
@@ -1082,16 +1467,18 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     // MARK: - Slider Change
     
-   
+    
     @IBAction func sliderChanged(sender: UISlider) {
         
         if(hasURL!){
-        let progress = Float64(sender.value)
-        let durationSeconds = CMTimeGetSeconds(self.playerItem.duration)
-        let result = durationSeconds * progress
-        let seekTime = CMTimeMakeWithSeconds(result, self.playerItem.currentTime().timescale)
-        self.player.seekToTime(seekTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
-        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+            
+            let progress = Float64(sender.value)
+            let durationSeconds = CMTimeGetSeconds(self.playerItem.duration)
+            let result = durationSeconds * progress
+            let seekTime = CMTimeMakeWithSeconds(result, asset.duration.timescale)
+            player.seekToTime(seekTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+            updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+            
         } else {
             videoSlider.enabled = false
         }
@@ -1106,6 +1493,8 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBAction func stepOneInside(sender: AnyObject) {
         
         timer.invalidate()
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        
     }
     
     
@@ -1113,16 +1502,20 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         pauseVideo()
         timer.invalidate()
-        timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("slowForward"), userInfo: nil, repeats: true)
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
         
+        self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("slowForward"), userInfo: nil, repeats: true)
+        
+        let priority = DISPATCH_QUEUE_PRIORITY_HIGH
+        dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
+            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        })
     }
     
     
     @IBAction func stepOneOutside(sender: AnyObject) {
         
         timer.invalidate()
-        
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
     }
     
     /*-----------------------------------------------------------------*/
@@ -1134,6 +1527,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBAction func stepBackInside(sender: AnyObject) {
         
         timer.invalidate()
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
     }
     
     
@@ -1142,14 +1536,17 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         pauseVideo()
         timer.invalidate()
         timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("slowBack"), userInfo: nil, repeats: true)
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        let priority = DISPATCH_QUEUE_PRIORITY_HIGH
+        dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
+            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        })
     }
     
     
     @IBAction func stepBackOutside(sender: AnyObject) {
         
         timer.invalidate()
-        
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
     }
     
     /*-----------------------------------------------------------------*/
@@ -1162,6 +1559,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBAction func rewindInside(sender: AnyObject) {
         
         timer.invalidate()
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
     }
     
     
@@ -1170,13 +1568,17 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         pauseVideo()
         timer.invalidate()
         timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("rewind"), userInfo: nil, repeats: true)
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        let priority = DISPATCH_QUEUE_PRIORITY_HIGH
+        dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
+            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        })
     }
     
     
     @IBAction func rewindOutside(sender: AnyObject) {
         
         timer.invalidate()
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
         
     }
     
@@ -1190,21 +1592,26 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     @IBAction func fastForwardInside(sender: AnyObject) {
         
         timer.invalidate()
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
     }
     
-
+    
     @IBAction func fastForwardDown(sender: AnyObject) {
         
         pauseVideo()
         timer.invalidate()
         timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: Selector("fastForward"), userInfo: nil, repeats: true)
-        updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        let priority = DISPATCH_QUEUE_PRIORITY_HIGH
+        dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
+            self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(0.001, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
+        })
     }
     
     
     @IBAction func fastForwardOutside(sender: AnyObject) {
         
         timer.invalidate()
+        self.updateTimer = NSTimer.scheduledTimerWithTimeInterval(1/10000000000, target: self, selector: Selector("updateTime"), userInfo: nil, repeats: false)
         
     }
     
@@ -1212,7 +1619,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     
     /*These functions perform the StepOne,StepBack,FastForward,Rewind actions*/
-
+    
     
     func slowForward() {
         let priority = DISPATCH_QUEUE_PRIORITY_HIGH
@@ -1224,7 +1631,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
     func slowBack() {
         let priority = DISPATCH_QUEUE_PRIORITY_HIGH
         dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
-            self.playerItem.stepByCount(-1)
+           self.playerItem.stepByCount(-1)
         })
     }
     
@@ -1248,7 +1655,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
             self.playerItem.stepByCount(-2)
         })
-
+        
     }
     
     func clipFastForward() {
@@ -1262,7 +1669,7 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
         
         let priority = DISPATCH_QUEUE_PRIORITY_HIGH
         dispatch_async(dispatch_get_global_queue(priority, 0), { ()->() in
-        self.playerItem.stepByCount(-10)
+            self.playerItem.stepByCount(-10)
         })
     }
     
@@ -1272,49 +1679,317 @@ class MainViewController: UIViewController, UIImagePickerControllerDelegate, UIN
             self.playerItem.stepByCount(10)
         })
     }
-
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        
-        if (segue.identifier == "mark"){
-            print("Mark View")
-            let secondScene = segue.destinationViewController as! MarkViewController
+    
+    
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        return true
+    }
+    
+    func textFieldShouldEndEditing(textField: UITextField) -> Bool {
+        if(textField.text! == ""){
+            gameTitles[textField.tag-1] = "Enter Game Title. - Example: Florida vs Tennessee"
+            titlePrefs.setValue(textField.text!, forKey: "\(games[textField.tag-1])")
+        }else {
+            gameTitles[textField.tag-1] = textField.text!
+            titlePrefs.setValue(textField.text!, forKey: "\(games[textField.tag-1])")
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        if(textField.text! == ""){
+            gameTitles[textField.tag-1] = "Enter Game Title. - Example: Florida vs Tennessee"
+            titlePrefs.setValue(textField.text!, forKey: "\(games[textField.tag-1])")
+            textField.text! == ""
             
-            if let name = gameName.text {
+        }else {
+            
+            gameTitles[textField.tag-1] = textField.text!
+            print(games[textField.tag-1])
+            titlePrefs.setValue(textField.text!, forKey: "\(games[textField.tag-1])")
+        }
+        textField.resignFirstResponder()
+        return true
+    }
+    
+  
+    @IBAction func showHideDrawView(sender: UIButton) {
+        
+        if(drawView.hidden){
+            
+            drawView.awakeFromNib()
+            drawView.hidden = false
+            importButton.enabled = false
+            editButton.enabled = false
+            statsButton.enabled = false
+            clockButton.enabled = false
+            downLoadButton.enabled = false
+            
+        }else
+        {
+            importButton.enabled = true
+            editButton.enabled = true
+            statsButton.enabled = true
+            drawView.hidden = true
+            clockButton.enabled = true
+            downLoadButton.enabled = true
+        }
+        
+    }
+    
+    @IBAction func showHideClockView(sender: UIButton) {
+        
+        if(clockView.hidden){
+            
+            clockView.hidden = false
+            clockMessage.hidden = false
+            
+        }else
+        {
+            resetForClock()
+            clockView.hidden = true
+            doubleTapReset.hidden = true
+            clockMessage.hidden = true
+            
+        }
+        
+    }
+    
+    
+    func startTimeCountdown() {
+        clockMessage.hidden = true
+        timerForClock = NSTimer.scheduledTimerWithTimeInterval(1.0, target: self, selector: Selector("updateClockTimer"), userInfo: nil, repeats: true)
+    }
+    
+    func stopTimeCountdown() {
+        clockMessage.hidden = false
+        timerForClock.invalidate()
+    }
+    
+    func updateClockTimer() {
+        
+        if(timeForClock == 1){
+            UIView.animateWithDuration(0.3,
+                delay: 0,
+                usingSpringWithDamping: 0.3,
+                initialSpringVelocity: 0.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.timeLabel.transform = CGAffineTransformMakeScale(1.3, 1.3)
+                }, completion: nil)
+            UIView.animateWithDuration(0.4,
+                delay: 0.1,
+                usingSpringWithDamping: 0.3,
+                initialSpringVelocity: 0.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.timeLabel.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                }, completion: nil)
+            //clockView.backgroundColor = UIColor(red: 222/255, green: 111/255, blue: 111/255, alpha: 1)
+            pauseVideo()
+            timerForClock.invalidate()
+            doubleTapReset.hidden = false
+            timeLabel.transform = CGAffineTransformMakeScale(0.7, 0.7)
+            timeLabel.frame.origin.y = 30
+        }
+    
+        if(timeForClock > 0){
+            timeForClock--
+            timeLabel.text = "\(timeForClock)"
+        }
+        
+        
+    }
+    
+    func resetForClock() {
+        
+        let clock = clockType[nextClockType]
+        
+        switch clock {
+            
+        case "Shot Clock":
+           timeForClock = 30
+        case "Throw In":
+            timeForClock = 5
+        case "Back Court":
+            timeForClock = 10
+        default:
+            break
+        }
+        
+        timeLabel.transform = CGAffineTransformMakeScale(1.0, 1.0)
+        timeLabel.frame.origin.y = 26
+        timeLabel.text = "\(timeForClock)"
+        doubleTapReset.hidden = true
+        clockView.backgroundColor = UIColor.clearColor()
+    }
+    
+    func changeClock(gestureRecognizer: UIPanGestureRecognizer) {
+     
+        if gestureRecognizer.state == UIGestureRecognizerState.Began {
                 
-                secondScene.gameName = name
+                let velocity: CGPoint = gestureRecognizer.velocityInView(self.view)
+                
+                if(velocity.x > 0)
+                {
+                   let clock = clockType[nextClockType]
+                    
+                    switch clock {
+                        
+                    case "Shot Clock":
+                        timeForClock = timeForThrowIn
+                        clockHeader.text = "Throw In"
+                        timeLabel.text = "\(timeForClock)"
+                        doubleTapReset.hidden = true
+                        timeLabel.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                        timeLabel.frame.origin.y = 26
+                        nextClockType++
+                        
+                    case "Throw In":
+                        timeForClock = timeForBackCourt
+                        clockHeader.text = "Back Court"
+                        timeLabel.text = "\(timeForClock)"
+                        doubleTapReset.hidden = true
+                        timeLabel.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                        timeLabel.frame.origin.y = 26
+                        nextClockType++
+                        
+                    default:
+                        break
+                    }
+                }
+                    
+                else
+                {
+                    let clock = clockType[nextClockType]
+                    
+                    switch clock {
+                        
+                    
+                    case "Throw In":
+                        timeForClock = timeForShotclock
+                        clockHeader.text = "Shot Clock"
+                        timeLabel.text = "\(timeForClock)"
+                        doubleTapReset.hidden = true
+                        timeLabel.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                        timeLabel.frame.origin.y = 26
+                        nextClockType--
+                        
+                    case "Back Court":
+                        timeForClock = timeForThrowIn
+                        clockHeader.text = "Throw In"
+                        timeLabel.text = "\(timeForClock)"
+                        doubleTapReset.hidden = true
+                        timeLabel.transform = CGAffineTransformMakeScale(1.0, 1.0)
+                        timeLabel.frame.origin.y = 26
+                        nextClockType--
+                        
+                    default:
+                        break
+                    }
+                   
+                }
+            
+        }
+    }
+    
+    @IBAction func insertClip(sender: UIButton) {
+        
+        if(clipView.frame.origin.x == -350){
+            
+            UIView.animateWithDuration(0.3,
+                delay: 0,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 0.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.clipView.frame.origin.x = -30
+                }, completion: nil)
+            
+            
+            UIView.animateWithDuration(1.0,
+                delay: 0.1,
+                usingSpringWithDamping: 0.7,
+                initialSpringVelocity: 5.5,
+                options: UIViewAnimationOptions.CurveEaseInOut,
+                animations: {
+                    self.clipView.frame.origin.x = -45
+                }, completion:nil)
+            
+            var locations  = [PlayData]()
+            
+            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+            let context : NSManagedObjectContext = appDelegate.managedObjectContext
+            
+            let fetchRequest = NSFetchRequest(entityName: "PlayInfo")
+            do{
+                locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
+            } catch{}
+            
+            for location in locations {
+                
+                if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
+                   var t = Float64(location.play.componentsSeparatedByString("+")[7])
+                    data.append(t!)
+                }
+                clipTableView.reloadData()
             }
+            
+        }else{
+        
+            
+        UIView.animateWithDuration(0.3,
+            delay: 0,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 0.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: {
+                self.clipView.frame.origin.x = -20
+            }, completion: nil)
+        
+        
+        UIView.animateWithDuration(1.0,
+            delay: 0.1,
+            usingSpringWithDamping: 0.7,
+            initialSpringVelocity: 5.5,
+            options: UIViewAnimationOptions.CurveEaseInOut,
+            animations: {
+                self.clipView.frame.origin.x = -350
+            }, completion:nil)
+            data.removeAll()
+            
         }
         
-        if (segue.identifier == "stats"){
-            print("Stats")
-           
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.data.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell: UITableViewCell = (tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell?)!
+        
+        if(indexPath.row % 2 == 0){
+            cell.backgroundColor = UIColor.clearColor()
+        }else {
+            cell.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+            cell.textLabel?.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.0)
         }
         
-        if (segue.identifier == "download"){
-            print("Download")
-        }
+        cell.textLabel?.text = "\(data[indexPath.row])"
+        
+        return cell
+    }
     
-    
-    
-    
-}
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        let tmSc = asset.duration.timescale
+        let seekTime = CMTimeMakeWithSeconds(data[indexPath.row], tmSc)
+        print(seekTime)
+        player.seekToTime(seekTime, toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+    }
     
 
+    
+    
 }
