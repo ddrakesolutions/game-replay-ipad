@@ -30,6 +30,7 @@ class MarkView: UIView, UITextFieldDelegate {
     var wasItCorrect = "0"
     var comments = "0"
     var gameName = "0"
+    var mainView = MainViewController()
     
     let playData = ["BALLHANDLER/DRIBBLER", "POST PLAY", "OUT OF BOUNDS", "REBOUNDING", "TRANSITION", "BLOCK/CHARGE", "SCREEN", "TRAVEL", "BACK COURT", "FREE THROW"]
     
@@ -168,6 +169,7 @@ class MarkView: UIView, UITextFieldDelegate {
                 })
         
         resetMarkView()
+        mainView.awakeFromNib()
     }
     
     
@@ -208,7 +210,7 @@ class MarkView: UIView, UITextFieldDelegate {
         let en = NSEntityDescription.entityForName("PlayInfo", inManagedObjectContext: context)
         let play = PlayData(entity: en!, insertIntoManagedObjectContext: context)
          print(gameFile)
-        play.play = "\(position)" + "+" + "\(playOccurrence)" + "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)" + "+" + "\(gameFile)" + "+" + "\(currentTimeForData)"
+        play.play = "\(position)" + "+" + "\(playOccurrence)" + "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)" + "+" + "\(gameFile)" + "+" + "\(currentTimeForData.seconds)"
     
         do{
             try context.save()
@@ -246,7 +248,6 @@ class MarkView: UIView, UITextFieldDelegate {
         playOccurrence = "0"
         wasItCorrect = "0"
         comments = "0"
-        
         playTypeSegment1.selectedSegmentIndex = -1
         playTypeSegment2.selectedSegmentIndex = -1
         playTypeSegment3.selectedSegmentIndex = -1

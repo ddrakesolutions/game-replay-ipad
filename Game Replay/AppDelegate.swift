@@ -17,6 +17,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        let filemgr = NSFileManager.defaultManager()
+        let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)
+        let docsDir = dirPaths[0]
+        let videoClip = docsDir.stringByAppendingString("/Video Clips")
+        let dataBase = docsDir.stringByAppendingString("/Data")
+        
+        if(!filemgr.fileExistsAtPath(videoClip)){
+            do{
+                try filemgr.createDirectoryAtPath(videoClip, withIntermediateDirectories: true, attributes: nil)
+            }
+            catch{
+                print("Failed to create")
+            }
+        }
+        
+        if(!filemgr.fileExistsAtPath(dataBase)){
+            do{
+                try filemgr.createDirectoryAtPath(dataBase, withIntermediateDirectories: true, attributes: nil)
+            }
+            catch{
+                print("Failed to create")
+            }
+        }
+        
         return true
     }
 
@@ -72,7 +96,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // The persistent store coordinator for the application. This implementation creates and returns a coordinator, having added the store for the application to it. This property is optional since there are legitimate error conditions that could cause the creation of the store to fail.
         // Create the coordinator and store
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("SingleViewCoreData.sqlite")
+        let url = self.applicationDocumentsDirectory.URLByAppendingPathComponent("/Data/SingleViewCoreData.sqlite")
         var failureReason = "There was an error creating or loading the application's saved data."
         do {
             try coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: url, options: nil)
