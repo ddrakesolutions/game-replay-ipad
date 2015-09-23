@@ -18,6 +18,17 @@ class DataForDisplay: NSObject {
     var collectionHeight: Float = 0.0
     var numberOfItems = 0
     
+    var trailCommentsForGame = [String]()
+    var centerCommentsForGame = [String]()
+    var leadCommentsForGame = [String]()
+    
+    var trailCommentsForOverall = [String]()
+    var centerCommentsForOverall = [String]()
+    var leadCommentsForOverall = [String]()
+    
+    var commentsForOverall = [String]()
+    var commentsForGame = [String]()
+    
     var totalCountForGame = 0
     var totalCorrectForGame = 0
     
@@ -102,6 +113,15 @@ class DataForDisplay: NSObject {
     var heldBallCount = 0
     var heldBallCorrect = 0
     
+    var teamControlCount = 0
+    var teamControlCorrect = 0
+    
+    var hackCount = 0
+    var hackCorrect = 0
+    
+    var holdCount = 0
+    var holdCorrect = 0
+    
 
     
     override init() {
@@ -120,8 +140,6 @@ class DataForDisplay: NSObject {
         do{
             locations = try context.executeFetchRequest(fetchRequest) as! [PlayData]
         } catch{}
-        
-    
         
         for location in locations {
             if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
@@ -153,15 +171,130 @@ class DataForDisplay: NSObject {
             items.append(location.play.componentsSeparatedByString("+")[4] as String)
             }
         }
-        
+       
         for location in locations {
+            
             if(location.play.componentsSeparatedByString("+")[6] == gameFile) {
-            items.append(location.play.componentsSeparatedByString("+")[5] as String)
+                
+                
+                switch location.play.componentsSeparatedByString("+")[0] {
+                    
+                case "TRAIL":
+                    
+                    if(!trailCommentsForGame.contains("TRAIL")){
+                        if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        trailCommentsForGame.append("TRAIL")
+                        }
+                    }
+                    
+                    if(!trailCommentsForGame.contains(location.play.componentsSeparatedByString("+")[5])){
+                        if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        trailCommentsForGame.append(location.play.componentsSeparatedByString("+")[5])
+                        }
+                    }
+                    
+                case "CENTER":
+                    
+                    if(!centerCommentsForGame.contains("CENTER")){
+                        if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        centerCommentsForGame.append("CENTER")
+                        }
+                    }
+                    if(!centerCommentsForGame.contains(location.play.componentsSeparatedByString("+")[5])){
+                        if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        centerCommentsForGame.append(location.play.componentsSeparatedByString("+")[5])
+                        }
+                    }
+                    
+                case "LEAD":
+                    
+                    if(!leadCommentsForGame.contains("LEAD")){
+                        if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        leadCommentsForGame.append("LEAD")
+                        }
+                    }
+                    if(!leadCommentsForGame.contains(location.play.componentsSeparatedByString("+")[5])){
+                        if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        leadCommentsForGame.append(location.play.componentsSeparatedByString("+")[5])
+                        }
+                    }
+                    
+                    
+                default:
+                    break
+                }
+                
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[2] == gameFile) {
+                
+                switch location.play.componentsSeparatedByString("+")[0] {
+                case "TRAIL":
+                    
+                    if(!trailCommentsForGame.contains("TRAIL")){
+                        if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        trailCommentsForGame.append("TRAIL")
+                        }
+                    }
+                    if(!trailCommentsForGame.contains(location.play.componentsSeparatedByString("+")[1])){
+                        if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        trailCommentsForGame.append(location.play.componentsSeparatedByString("+")[1])
+                        }
+                    }
+                    
+                case "CENTER":
+                    
+                    if(!centerCommentsForGame.contains("CENTER")){
+                        if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        centerCommentsForGame.append("CENTER")
+                        }
+                    }
+                    if(!centerCommentsForGame.contains(location.play.componentsSeparatedByString("+")[1])){
+                        if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        centerCommentsForGame.append(location.play.componentsSeparatedByString("+")[1])
+                        }
+                    }
+                    
+                case "LEAD":
+                    
+                    if(!leadCommentsForGame.contains("LEAD")){
+                        if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        leadCommentsForGame.append("LEAD")
+                        }
+                    }
+                    if(!leadCommentsForGame.contains(location.play.componentsSeparatedByString("+")[1])){
+                        if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        leadCommentsForGame.append(location.play.componentsSeparatedByString("+")[1])
+                        }
+                    }
+                    
+                    
+                default:
+                    break
+                }
+                
+            }
+            
+    }
+        
+        
+        
+        
+        for tc in trailCommentsForGame {
+            if(tc != "0"){
+                commentsForGame.append(tc)
             }
         }
-        
-        
-        
+        for tc in centerCommentsForGame {
+            if(tc != "0"){
+                commentsForGame.append(tc)
+            }
+        }
+        for tc in leadCommentsForGame {
+            if(tc != "0"){
+                commentsForGame.append(tc)
+            }
+        }
         
         for item in items {
             
@@ -199,6 +332,10 @@ class DataForDisplay: NSObject {
                 }
                 
                 if(item.containsString("OFF BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("NO CALL")){
                     items_to_display.append(item)
                 }
                 
@@ -271,6 +408,18 @@ class DataForDisplay: NSObject {
                 }
                 
                 if(item.containsString("HELD BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("TEAM CONTROL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("HACK/HIT ON ARM")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("HOLD")){
                     items_to_display.append(item)
                 }
                 
@@ -543,16 +692,43 @@ class DataForDisplay: NSObject {
                     totalCorrectForGame++
                 }
             }
+                
+                if(location.play.componentsSeparatedByString("+")[3] == "TEAM CONTROL") {
+                    teamControlCount++
+                    totalCountForGame++
+                    if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                        teamControlCorrect++
+                        totalCorrectForGame++
+                    }
+                }
+                
+                if(location.play.componentsSeparatedByString("+")[3] == "HACK/HIT ON ARM") {
+                    hackCount++
+                    totalCountForGame++
+                    if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                        hackCorrect++
+                        totalCorrectForGame++
+                    }
+                }
+                
+                if(location.play.componentsSeparatedByString("+")[3] == "HOLD") {
+                    holdCount++
+                    totalCountForGame++
+                    if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                        holdCorrect++
+                        totalCorrectForGame++
+                    }
+                }
         }
             
             
             
         }
-        
         
     }
     
     func setItemsToDisplayForOverall(){
+    
         
         var locations  = [PlayData]()
         
@@ -567,11 +743,14 @@ class DataForDisplay: NSObject {
         
         
         for location in locations {
+            if(location.play.componentsSeparatedByString("+")[4] != "T"){
             items.append(location.play.componentsSeparatedByString("+")[0] as String)
+            }
         }
         
         for location in locations {
-            items.append(location.play.componentsSeparatedByString("+")[1] as String)        }
+            items.append(location.play.componentsSeparatedByString("+")[1] as String)
+        }
         
         for location in locations {
             items.append(location.play.componentsSeparatedByString("+")[2] as String)
@@ -585,9 +764,128 @@ class DataForDisplay: NSObject {
             items.append(location.play.componentsSeparatedByString("+")[4] as String)
         }
         
-        
-        for item in items {
+        for location in locations {
+            items.append(location.play.componentsSeparatedByString("+")[5] as String)
             
+            switch location.play.componentsSeparatedByString("+")[0] {
+                
+            case "TRAIL":
+                
+                if(!trailCommentsForOverall.contains("TRAIL")){
+                    if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        trailCommentsForOverall.append("TRAIL")
+                    }
+                }
+                
+                if(!trailCommentsForOverall.contains(location.play.componentsSeparatedByString("+")[5])){
+                    if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        trailCommentsForOverall.append(location.play.componentsSeparatedByString("+")[5])
+                    }
+                }
+                
+            case "CENTER":
+                
+                if(!centerCommentsForOverall.contains("CENTER")){
+                    if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        centerCommentsForOverall.append("CENTER")
+                    }
+                }
+                if(!centerCommentsForOverall.contains(location.play.componentsSeparatedByString("+")[5])){
+                    if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        centerCommentsForOverall.append(location.play.componentsSeparatedByString("+")[5])
+                    }
+                }
+                
+            case "LEAD":
+                
+                if(!leadCommentsForOverall.contains("LEAD")){
+                    if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        leadCommentsForOverall.append("LEAD")
+                    }
+                }
+                if(!leadCommentsForOverall.contains(location.play.componentsSeparatedByString("+")[5])){
+                    if(location.play.componentsSeparatedByString("+")[5] != ""){
+                        leadCommentsForOverall.append(location.play.componentsSeparatedByString("+")[5])
+                    }
+                }
+                
+                
+            default:
+                break
+            }
+            
+
+            if(location.play.componentsSeparatedByString("+")[4] == "T"){
+                
+            switch location.play.componentsSeparatedByString("+")[0] {
+            case "TRAIL":
+                
+                
+                
+                if(!trailCommentsForOverall.contains("TRAIL")){
+                    if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        trailCommentsForOverall.append("TRAIL")
+                    }
+                }
+                if(!trailCommentsForOverall.contains(location.play.componentsSeparatedByString("+")[1])){
+                    if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        trailCommentsForOverall.append(location.play.componentsSeparatedByString("+")[1])
+                    }
+                }
+                
+            case "CENTER":
+                
+                if(!centerCommentsForOverall.contains("CENTER")){
+                    if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        centerCommentsForOverall.append("CENTER")
+                    }
+                }
+                if(!centerCommentsForOverall.contains(location.play.componentsSeparatedByString("+")[1])){
+                    if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        centerCommentsForOverall.append(location.play.componentsSeparatedByString("+")[1])
+                    }
+                }
+                
+            case "LEAD":
+                
+                if(!leadCommentsForOverall.contains("LEAD")){
+                    if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        leadCommentsForOverall.append("LEAD")
+                    }
+                }
+                if(!leadCommentsForOverall.contains(location.play.componentsSeparatedByString("+")[1])){
+                    if(location.play.componentsSeparatedByString("+")[1] != ""){
+                        leadCommentsForOverall.append(location.play.componentsSeparatedByString("+")[1])
+                    }
+                }
+                
+                
+            default:
+                break
+            }
+          }
+        
+        }
+
+    
+        for tc in trailCommentsForOverall {
+            if(tc != "0"){
+                commentsForOverall.append(tc)
+            }
+        }
+        for tc in centerCommentsForOverall {
+            if(tc != "0"){
+                commentsForOverall.append(tc)
+            }
+        }
+        for tc in leadCommentsForOverall {
+            if(tc != "0"){
+                commentsForOverall.append(tc)
+            }
+        }
+    
+        for item in items {
+           
             
             if(!items_to_display.contains(item)){
                 
@@ -621,6 +919,10 @@ class DataForDisplay: NSObject {
                 }
                 
                 if(item.containsString("OFF BALL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("NO CALL")){
                     items_to_display.append(item)
                 }
                 
@@ -696,6 +998,18 @@ class DataForDisplay: NSObject {
                     items_to_display.append(item)
                 }
                 
+                if(item.containsString("TEAM CONTROL")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("HACK/HIT ON ARM")){
+                    items_to_display.append(item)
+                }
+                
+                if(item.containsString("HOLD")){
+                    items_to_display.append(item)
+                }
+                
                 
                 
                 
@@ -704,9 +1018,11 @@ class DataForDisplay: NSObject {
             
         }
         
+        
         //--------------------------------------Count Each Position--------------------------------------------//
         for location in locations {
             //=================POSITION========================//
+            if(location.play.componentsSeparatedByString("+")[4] != "T"){
             if(location.play.componentsSeparatedByString("+")[0] == "TRAIL") {
                 trailCount++
                 totalCountForGame++
@@ -733,7 +1049,7 @@ class DataForDisplay: NSObject {
                     totalCorrectForGame++
                 }
             }
-            
+            }
             
             //=================PLAY OCCURRANCE========================//
             
@@ -962,9 +1278,35 @@ class DataForDisplay: NSObject {
                 }
             }
             
+            if(location.play.componentsSeparatedByString("+")[3] == "TEAM CONTROL") {
+                teamControlCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    teamControlCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "HACK/HIT ON ARM") {
+                hackCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    hackCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
+            if(location.play.componentsSeparatedByString("+")[3] == "HOLD") {
+                holdCount++
+                totalCountForGame++
+                if (location.play.componentsSeparatedByString("+")[4] == "YES"){
+                    holdCorrect++
+                    totalCorrectForGame++
+                }
+            }
+            
             
         }
-        
         
     }
     
@@ -973,6 +1315,14 @@ class DataForDisplay: NSObject {
         
          items.removeAll()
          items_to_display.removeAll()
+         commentsForGame.removeAll()
+         commentsForOverall.removeAll()
+         trailCommentsForGame.removeAll()
+         leadCommentsForGame.removeAll()
+         centerCommentsForGame.removeAll()
+         trailCommentsForOverall.removeAll()
+         leadCommentsForOverall.removeAll()
+         centerCommentsForOverall.removeAll()
          i = 0
          scrollHeight = 0.0
          collectionHeight = 0.0
@@ -1061,7 +1411,16 @@ class DataForDisplay: NSObject {
         
          heldBallCount = 0
          heldBallCorrect = 0
+        
+        teamControlCount = 0
+        teamControlCorrect = 0
+        
+        hackCount = 0
+        hackCorrect = 0
+        
+        holdCount = 0
+        holdCorrect = 0
     }
-    
+
     
 }

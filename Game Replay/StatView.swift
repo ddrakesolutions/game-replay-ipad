@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
+class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource, UITableViewDataSource, UITableViewDelegate {
 
     
     @IBOutlet weak var collectionView: UICollectionView!
@@ -22,6 +22,10 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     @IBOutlet weak var noDataMessage: UILabel!
     @IBOutlet weak var overallStatView: OverallStatsView!
     @IBOutlet weak var gameNameLabel: UILabel!
+    @IBOutlet weak var commentTable: UITableView!
+    @IBOutlet weak var dataImage: UIImageView!
+    @IBOutlet weak var markedPlayTitle: UILabel!
+    @IBOutlet weak var commentTitle: UILabel!
   
     var data = DataForDisplay()
     var informationForBarGraph = [String]()
@@ -47,7 +51,6 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     func xibSetup() {
         
         count()
-        data.setItemsToDisplayForGame()
         if(data.items_to_display.isEmpty){
             data.numberOfItems = 1
             
@@ -94,8 +97,9 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     
     func xibReload() {
         
-        count()
         data.setItemsToDisplayForGame()
+        view.removeFromSuperview()
+        count()
         if(data.items_to_display.isEmpty){
             data.numberOfItems = 1
             
@@ -116,25 +120,45 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         
         collectionView.delegate = self
         collectionView.registerNib(UINib(nibName: "StatCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "cell")
+        commentTable.registerNib(UINib(nibName: "CommentGameTableViewCell", bundle: nil), forCellReuseIdentifier: "cell2")
         collectionView.frame.size.height = CGFloat(collectionHeight / 2)
-        scrollView.contentSize = CGSize(width: 1024, height: CGFloat(scrollHeight / 2))
         playCount.text = "\(countTotal)"
         correctCount.text = "\(countCorrectTotal)"
         gamePercentage.text = NSString(format: "%.0f%@", Float(data.totalCorrectForGame) / Float(data.totalCountForGame) * 100, "%") as String
-        if(data.items_to_display.isEmpty){
+        if(data.items_to_display.isEmpty && data.commentsForGame.isEmpty){
             
             noDataHeader.hidden = false
             noDataMessage.hidden = false
+            dataImage.hidden = false
+            data.reset()
+            commentTitle.hidden = true
             gamePercentage.text = "0%"
+            markedPlayTitle.hidden = true
             
         }else
         {
+            if(data.items_to_display.isEmpty){
+                gamePercentage.text = "0%"
+                markedPlayTitle.hidden = true
+            }else{
+                markedPlayTitle.hidden = false
+            }
+            
             noDataHeader.hidden = true
             noDataMessage.hidden = true
+            dataImage.hidden = true
+            commentTitle.hidden = false
         }
         overallStatView.hidden = true
         gameNameLabel.text = gameNameForData
-        //addSubview(view)
+        commentTable.delegate = self
+        commentTable.frame.size.height = CGFloat(50 * data.commentsForGame.count)
+        commentTable.frame.origin.y = CGFloat(415)
+        collectionView.frame.origin.y = CGFloat(commentTable.frame.origin.y + commentTable.frame.size.height + 40)
+        commentTitle.frame.origin.y = CGFloat(385)
+        markedPlayTitle.frame.origin.y = CGFloat(commentTable.frame.origin.y + commentTable.frame.size.height + 10)
+        scrollView.contentSize = CGSize(width: 1024, height: commentTable.frame.size.height + collectionView.frame.size.height + 278)
+        addSubview(view)
         
     }
     
@@ -171,7 +195,6 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
 
         
         
-        
     }
     
     @IBAction func closeStats(sender: AnyObject) {
@@ -203,6 +226,8 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         let title = cell.viewWithTag(1) as! UILabel
         let percentage = cell.viewWithTag(2) as! UILabel
         let labelDetail = cell.viewWithTag(5) as! UILabel
+        let correctCalls = cell.viewWithTag(3) as! UILabel
+        let totalCalls = cell.viewWithTag(4) as! UILabel
         
         var t = ""
         var tCall: Float = 0.0
@@ -426,12 +451,43 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
             p = Float(cCall / tCall)
         }
         
+        if(data.items_to_display[indexPath.row] == "TEAM CONTROL"){
+            
+            t = "TEAM CONTROL"
+            tCall = Float(data.teamControlCount)
+            cCall = Float(data.teamControlCorrect)
+            p = Float(cCall / tCall)
+        }
+        
+        if(data.items_to_display[indexPath.row] == "HACK/HIT ON ARM"){
+            
+            t = "HACK"
+            tCall = Float(data.hackCount)
+            cCall = Float(data.hackCorrect)
+            p = Float(cCall / tCall)
+        }
+        
+        if(data.items_to_display[indexPath.row] == "HOLD"){
+            
+            t = "HOLD"
+            tCall = Float(data.holdCount)
+            cCall = Float(data.holdCorrect)
+            p = Float(cCall / tCall)
+        }
+        
+        correctCalls.hidden = true
+        totalCalls.hidden = true
     
         title.text = t
         percentage.text = NSString(format: "%.0f%@", p * 100, "%") as String
-        //correctCalls.text = "\(Int(cCall))"
-        //totalCalls.text = "\(Int(tCall))"
-        labelDetail.text = " You had \(Int(cCall)) correct calls out of \(Int(tCall))"
+        correctCalls.text = "\(Int(cCall))"
+        totalCalls.text = "\(Int(tCall))"
+        if(correctCalls.text == "0" || correctCalls.text == "1"){
+            labelDetail.text = " You had \(Int(cCall)) correct call out of \(Int(tCall))"
+        }else{
+            labelDetail.text = " You had \(Int(cCall)) correct calls out of \(Int(tCall))"
+        }
+
             
     
         return cell
@@ -452,27 +508,67 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
         switch sender.selectedSegmentIndex {
             
         case 0:
-           print("Current Game")
             overallStatView.hidden = true
+            awakeFromNib()
         case 1:
-            print("Overall Stats")
+            overallStatView.awakeFromNib()
             overallStatView.hidden = false
-        case 2:
-            print("Tendencies")
-            
         default:
             break
         }
         
     }
-   
-
-    override func awakeFromNib() {
-        data.reset()
-        xibReload()
-        collectionView.reloadData()
-        countTotal = 0
-        countCorrectTotal = 0
+    
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.commentsForGame.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell: UITableViewCell = (tableView.dequeueReusableCellWithIdentifier("cell2") as UITableViewCell?)!
+        
+        let c = cell.viewWithTag(1) as! UILabel
+        
+        switch data.commentsForGame[indexPath.row] {
+            
+        case "TRAIL":
+            
+            c.text = "     TRAIL"
+            c.font = UIFont(name: "HelveticaNeue-Medium", size: 13)
+            c.textColor = UIColor.lightGrayColor()
+            
+        case "CENTER":
+            
+            c.text = "      CENTER"
+            c.font = UIFont(name: "HelveticaNeue-Medium", size: 13)
+            c.textColor = UIColor.lightGrayColor()
+            
+        case "LEAD":
+            
+            c.text = "      LEAD"
+            c.font = UIFont(name: "HelveticaNeue-Medium", size: 13)
+            c.textColor = UIColor.lightGrayColor()
+            
+        default:
+            c.text = "      ⚐ " + data.commentsForGame[indexPath.row]
+            
+        }
+        
+        if(indexPath.row % 2 == 0){
+            cell.backgroundColor = UIColor.clearColor()
+        }else {
+            cell.backgroundColor = UIColor.whiteColor().colorWithAlphaComponent(0.2)
+        }
+        
+        cell.selectionStyle = .None
+        
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        
+        return 50.0
     }
     
     
@@ -480,8 +576,20 @@ class StatView: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
     
     
     
+   
+
+    override func awakeFromNib() {
+        switchViewSegment.selectedSegmentIndex = 0
+        data.reset()
+        xibReload()
+        collectionView.reloadData()
+        countTotal = 0
+        countCorrectTotal = 0
+        commentTable.reloadData()
+    }
     
     
+   
     
     
     

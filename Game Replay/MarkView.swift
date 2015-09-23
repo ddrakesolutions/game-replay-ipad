@@ -28,11 +28,9 @@ class MarkView: UIView, UITextFieldDelegate {
     var callType = "0"
     var playOccurrence = "0"
     var wasItCorrect = "0"
-    var comments = "0"
+    var comments = ""
     var gameName = "0"
     var mainView = MainViewController()
-    
-    let playData = ["BALLHANDLER/DRIBBLER", "POST PLAY", "OUT OF BOUNDS", "REBOUNDING", "TRANSITION", "BLOCK/CHARGE", "SCREEN", "TRAVEL", "BACK COURT", "FREE THROW"]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -53,6 +51,7 @@ class MarkView: UIView, UITextFieldDelegate {
         commentsTextField.delegate = self
         commentsTextField.keyboardType = UIKeyboardType.ASCIICapable
         commentsTextField.returnKeyType = .Done
+        commentsTextField.autocapitalizationType = .Sentences
         textFieldBGBlur.hidden = true
         addSubview(view)
     }
@@ -203,14 +202,19 @@ class MarkView: UIView, UITextFieldDelegate {
     }
     
     
-    
+        let randomID = randomStringWithLength(8)
         
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let context : NSManagedObjectContext = appDelegate.managedObjectContext
         let en = NSEntityDescription.entityForName("PlayInfo", inManagedObjectContext: context)
         let play = PlayData(entity: en!, insertIntoManagedObjectContext: context)
-         print(gameFile)
-        play.play = "\(position)" + "+" + "\(playOccurrence)" + "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)" + "+" + "\(gameFile)" + "+" + "\(currentTimeForData.seconds)"
+    
+        var gameInfo = "\(position)" + "+" + "\(playOccurrence)"
+        gameInfo += "+" + "\(callType)" + "+" + "\(playType)" + "+" + "\(wasItCorrect)" + "+" + "\(comments)"
+        gameInfo += "+" + "\(gameFile)"
+        gameInfo += "+" + "\(currentTimeForData.seconds)" + "+" + (randomID as String)
+    
+        play.play = gameInfo
     
         do{
             try context.save()
@@ -247,7 +251,7 @@ class MarkView: UIView, UITextFieldDelegate {
         callType = "0"
         playOccurrence = "0"
         wasItCorrect = "0"
-        comments = "0"
+        comments = ""
         playTypeSegment1.selectedSegmentIndex = -1
         playTypeSegment2.selectedSegmentIndex = -1
         playTypeSegment3.selectedSegmentIndex = -1
@@ -262,7 +266,20 @@ class MarkView: UIView, UITextFieldDelegate {
     
     
     
-    
+    func randomStringWithLength (len : Int) -> NSString {
+        
+        let letters : NSString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        
+        let randomString : NSMutableString = NSMutableString(capacity: len)
+        
+        for (var i=0; i < len; i++){
+            let length = UInt32 (letters.length)
+            let rand = arc4random_uniform(length)
+            randomString.appendFormat("%C", letters.characterAtIndex(Int(rand)))
+        }
+        
+        return randomString
+    }
     
     
     
